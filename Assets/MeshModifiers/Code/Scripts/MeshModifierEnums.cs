@@ -1,0 +1,1 @@
+﻿public enum NormalsType { HighQuality, LowQuality, None }
