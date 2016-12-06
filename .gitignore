@@ -1,12 +1,38 @@
-# Windows image file caches
-Thumbs.db
+# ===================================== #
+# UNITY FOLDERS
+# ===================================== #
+Temp
+Library
+Obj
+obj
+
+# ===================================== #
+# Visual Studio / MonoDevelop generated
+# ===================================== #
+ExportedObj/
+*.svd
+*.userprefs
+*.csproj
+*.pidb
+*.suo
+*.sln
+*.user
+*.unityproj
+*.booproj
+
+# ===================================== #
+# OS generated
+# ===================================== #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
 ehthumbs.db
-
-# Folder config file
-Desktop.ini
-
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
+Thumbs.db
+.AppleDouble
+.LSOverride
 
 # Windows Installer files
 *.cab
@@ -14,34 +40,31 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 
-# Windows shortcuts
-*.lnk
+# Folder config file
+Desktop.ini
 
-# =========================
-# Operating System Files
-# =========================
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
 
-# OSX
-# =========================
+# ===================================== #
+# CUSTOM
+# ===================================== #
+# PROJECT-RELATED
+Assets/_Content/GUI
+Assets/zNotes
 
-.DS_Store
-.AppleDouble
-.LSOverride
+# COPYRIGHTED / ASSET STORE
+zAssets
+Assets/NGUI
+Assets/6by7
+Assets/ProCore
+Assets/Hard Surface Pro
+Assets/Behavior Designer
+Assets/Plugins/Vectrosity.dll
 
-# Thumbnails
-._*
+# UNITY PRO
+Assets/Standard Assets/Image Effects (Pro Only)
+Assets/Editor/Image Effects
 
-# Files that might appear in the root of a volume
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
+# GITEYE
+*.project
