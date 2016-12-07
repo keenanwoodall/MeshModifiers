@@ -43,8 +43,6 @@ public class SquashAndStretchModifier : MeshModifierBase
 
 		Vector3.OrthoNormalize (ref scaleAxisX, ref scaleAxisY, ref scaleAxisZ);
 
-		Debug.DrawLine (transform.position - scaleAxisX, transform.position + scaleAxisX, Color.red);
-
 		scaleSpace.SetRow (0, scaleAxisX);
 		scaleSpace.SetRow (1, scaleAxisY);
 		scaleSpace.SetRow (2, scaleAxisZ);

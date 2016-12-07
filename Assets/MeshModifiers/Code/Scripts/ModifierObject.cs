@@ -40,11 +40,10 @@ namespace MeshModifiers
 		public float modifierStrength = 1f;
 
 		[Header ("Surface")]
+		[Tooltip ("When set to Low Quality, the smooothing angle is not taken into account. High Quality is very expensive and shouldn't be used every frame, if possible. You can call RefreshSurfaces manually to calculate High Quality normals at the time of your choosing.")]
 		public NormalsType recalcNormals = NormalsType.LowQuality;
 		[Range (0f, 180f), Tooltip ("The smoothing angle is only used when calculation is high quality. The mesh can never be less smooth than the imported mesh.")]
 		public float smoothingAngle = 60f;
-
-		public bool recalcTangents = false;
 
 		[Header ("Performance")]
 		[Tooltip ("Only performs modifications when this object is being rendered by the camera.")]
@@ -202,9 +201,12 @@ namespace MeshModifiers
 		/// <summary>
 		/// Recalculates normals.
 		/// </summary>
-		public void RefreshSurface ()
+		public void RefreshSurface (NormalsType normalsQuality)
 		{
-			switch (recalcNormals)
+			if (normalsQuality == NormalsType.None)
+				return;
+
+			switch (normalsQuality)
 			{
 				case NormalsType.LowQuality:
 					Mesh.RecalculateNormals ();
@@ -402,7 +404,7 @@ namespace MeshModifiers
 					// Reset the modded vertices to their base state so next frames modifications are based on the original vertices.
 					ResetModdedVerticesandNormals ();
 
-					RefreshSurface ();
+					RefreshSurface (recalcNormals);
 					Mesh.RecalculateBounds ();
 				}
 				else

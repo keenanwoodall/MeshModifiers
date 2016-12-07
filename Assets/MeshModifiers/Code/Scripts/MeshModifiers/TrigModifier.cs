@@ -11,9 +11,9 @@ public class TrigModifier : MeshModifierBase
 	public Vector3 speed = Vector3.one;
 
 	public Trig 
-		xAxis,
-		yAxis,
-		zAxis;
+		xAxis = new Trig (TrigType.Sin),
+		yAxis = new Trig (TrigType.Sin),
+		zAxis = new Trig (TrigType.Sin);
 
 	public bool useWorldPos = false;
 

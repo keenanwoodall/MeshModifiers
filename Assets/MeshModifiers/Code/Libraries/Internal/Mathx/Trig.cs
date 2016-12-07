@@ -123,11 +123,16 @@ namespace Mathx.Trig
 	[Serializable]
 	public class Trig : TrigObject
 	{
-		public TrigType type;
+		public TrigType trigType = TrigType.Sin;
+
+		public Trig (TrigType trigType)
+		{
+			this.trigType = trigType;
+		}
 
 		protected override float TrigFunction (float t)
 		{
-			switch (type)
+			switch (trigType)
 			{
 				case TrigType.Sin:
 					return Mathf.Sin (t);
