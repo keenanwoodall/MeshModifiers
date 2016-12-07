@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/MeshModifiers/Examples/Scenes/Trigonometry.unity
-  isLoaded: 1
-  isActive: 1
