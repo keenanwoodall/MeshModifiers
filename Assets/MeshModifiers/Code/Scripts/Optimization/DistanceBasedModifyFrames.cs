@@ -9,7 +9,6 @@ public class DistanceBasedModifyFrames : MonoBehaviour
 
 	public Transform target;
 
-	[Range (1, 10)]
 	public int
 		minFrames = 2,
 		maxFrames = 10;
@@ -42,6 +41,19 @@ public class DistanceBasedModifyFrames : MonoBehaviour
 		float distance = Vector3.Distance (modObject.transform.position, target.position);
 
 		modObject.modifyFrames = (int)Mathf.Lerp (minFrames, maxFrames, Mathf.InverseLerp (minFramesDistance, maxFramesDistance, distance));
+	}
+
+	void OnValidate ()
+	{
+		if (minFrames < 1)
+			minFrames = 1;
+		if (maxFrames < minFrames)
+			maxFrames = minFrames;
+
+		if (minFramesDistance < 0.01f)
+			minFramesDistance = 0.01f;
+		if (maxFramesDistance < minFramesDistance)
+			maxFramesDistance = minFramesDistance;
 	}
 
 	#endregion
