@@ -116,8 +116,6 @@ namespace MeshModifiers
 
 		#region Private Properties
 
-		private bool modifyingChunk = false;
-
 		private Vector3[] baseVertices;
 		private Vector3[] modifiedVertices;
 		private Vector3[] baseNormals;
@@ -139,7 +137,7 @@ namespace MeshModifiers
 		void Start ()
 		{
 			RefreshModifiers ();
-			StartCoroutine (ApplyModifiers ());
+			StartCoroutine (AutoApplyModifiers ());
 		}
 
 		void OnWillRenderObject ()
@@ -157,6 +155,57 @@ namespace MeshModifiers
 
 
 		#region Main Methods
+
+		/// <summary>
+		/// Modifies the whole mesh, as one chunk. If the parameter 'modifierIndexes' is null it will be set using GetUseableModifiers;
+		/// [HINT]: This method only changes the internal data, call ApplyModifications for the mesh data to reflect the internal data.
+		/// </summary>
+		/// <param name="modifierIndexes"></param>
+		public void ModifyAll (int[] modifierIndexes = null)
+		{
+			ModifyChunk (0, baseVertices.Length, modifierIndexes);
+		}
+
+		/// <summary>
+		/// Modifies chunk of the mesh. If the parameter, modifierIndexes, is null it will be set using GetUseableModifiers. 
+		/// [HINT]: This method only changes the internal data, call ApplyModifications for the mesh data to reflect the internal data.
+		/// </summary>
+		/// <param name="startIndex"></param>
+		/// <param name="stopIndex"></param>
+		/// <param name="modifierIndexes"></param>
+		public void ModifyChunk (int startIndex, int stopIndex, int[] modifierIndexes = null)
+		{
+			// If modifierIndexes are not supplied, use all useabled modifiers.
+			if (modifierIndexes == null)
+				modifierIndexes = GetUseableModifiers ();
+
+			// For each vertex in this chunk...
+			for (int currentVert = startIndex; currentVert < stopIndex; currentVert++)
+			{
+				// For each modifier...
+				for (int currentMod = 0; currentMod < modifierIndexes.Length; currentMod++)
+					modifiedVertices[currentVert] = modifiers[modifierIndexes[currentMod]].ModifyOffset (modifiedVertices[currentVert], modifiedNormals[currentVert]);
+
+				PostModPointOperation (currentVert);
+			}
+		}
+
+		/// <summary>
+		/// Call this after calling ModifyAll or ModifyChunk for the changes to be applied the the actual mesh.
+		/// </summary>
+		public void ApplyModifications ()
+		{
+			// Update the mesh's vertices to reflect the modified vertices.
+			Mesh.SetVertices (modifiedVertices.ToList ());
+
+			// Update the normals.
+			RefreshSurface (normalQuality);
+
+			Mesh.RecalculateBounds ();
+
+			// Reset the modded vertices to their base state so next frames modifications are based on the original vertices.
+			ResetVerticesAndNormals ();
+		}
 
 		/// <summary>
 		/// A safe way to change the modified mesh.
@@ -393,67 +442,44 @@ namespace MeshModifiers
 		/// Does ApplyModifiers over x frames to lessen performance impact.
 		/// </summary>
 		/// <returns></returns>
-		private IEnumerator ApplyModifiers ()
+		private IEnumerator AutoApplyModifiers ()
 		{
 			while (true)
 			{
-				if (!CanModify ())
-					yield return null;
-
-				// The current chunk index starts at zero.
-				currentModifiedChunkIndex = 0;
-
-				// Store the number of splits in a local variable so that if modifyFrames is changed before the modifications are complete, nothing will get messed up.
-				int chunks = modifyFrames;
-				// Find the approximate number of vertices in a single split.
-				int chunkSize = Mesh.vertexCount / chunks;
-
-				// Increment time based on how much approximate time will have passed when the mods are done.
-				Time += UnityEngine.Time.deltaTime * chunks;
-
-				int[] useableModifierIndexes = GetUseableModifiers ();
-				InvokePreMods (useableModifierIndexes);
-
-				// For each chunk...
-				for (int currentChunkIndex = 0; currentChunkIndex < chunks; currentChunkIndex++)
+				if (CanModify ())
 				{
-					if (refreshModifiersEveryFrame)
-						RefreshModifiers ();
+					// The current chunk index starts at zero.
+					currentModifiedChunkIndex = 0;
 
-					// A chunk of the mesh is about to be modified, so modifyingChunk must be true.
-					modifyingChunk = true;
+					// Store the number of splits in a local variable so that if modifyFrames is changed before the modifications are complete, nothing will get messed up.
+					int chunks = modifyFrames;
+					// Find the approximate number of vertices in a single split.
+					int chunkSize = Mesh.vertexCount / chunks;
 
-					// For each vertice in the current chunk... If the current split is the last split, find the remaining vertices (in case of a vertex count that can't be split perfectly) and add them to the vertices to loop through.
-					for (int currentVert = chunkSize * currentChunkIndex; currentVert < chunkSize * (currentChunkIndex + 1) + ((currentChunkIndex + 1 == chunks) ? CalcVertRemainder (GetVertCount (), chunkSize, chunks) : 0); currentVert++)
+					// Increment time based on how much approximate time will have passed when the mods are done.
+					Time += UnityEngine.Time.deltaTime * chunks;
+
+					InvokePreMods (GetUseableModifiers ());
+
+					// For each chunk...
+					for (int currentChunkIndex = 0; currentChunkIndex < chunks; currentChunkIndex++)
 					{
-						// Make sure we won't try to access any modifiers that have been deleted since the last chunk was modded.
-						useableModifierIndexes = GetUseableModifiers ();
+						if (refreshModifiersEveryFrame)
+							RefreshModifiers ();
 
-						// For each modifier...
-						for (int currentMod = 0; currentMod < useableModifierIndexes.Length; currentMod++)
-							modifiedVertices[currentVert] = modifiers[useableModifierIndexes[currentMod]].ModifyOffset (modifiedVertices[currentVert], modifiedNormals[currentVert]);
+						ModifyChunk (chunkSize * currentChunkIndex, chunkSize * (currentChunkIndex + 1) + ((currentChunkIndex + 1 == chunks) ? CalcVertRemainder (GetVertCount (), chunkSize, chunks) : 0), GetUseableModifiers ());
 
-						PostModPointOperation (currentVert);
+						// The current chunk's modifications are finished so the next chunk will start being processed.
+						currentModifiedChunkIndex++;
+
+						// Wait a frame.
+						yield return null;
 					}
 
-					// The current chunk's modifications are finished so modifyingChunk is false and the next chunk will start being processed.
-					modifyingChunk = false;
-					currentModifiedChunkIndex++;
-
-					// Wait a frame.
-					yield return null;
+					ApplyModifications ();
 				}
-
-				// Update the mesh's vertices to reflect the modified vertices.
-				Mesh.SetVertices (modifiedVertices.ToList ());
-
-				// Update the normals.
-				RefreshSurface (normalQuality);
-
-				Mesh.RecalculateBounds ();
-
-				// Reset the modded vertices to their base state so next frames modifications are based on the original vertices.
-				ResetVerticesAndNormals ();
+				else
+					yield return null;
 			}
 		}
 

@@ -43,12 +43,6 @@ public class ModifierObjectEditor : Editor
 		vpsRefreshCounter += deltaTime;
 		if (Application.isPlaying)
 		{
-			if (GUILayout.Button ("Save Mesh"))
-			{
-				Mesh tempMesh = (Mesh)UnityEngine.Object.Instantiate (current.Mesh);
-				AssetDatabase.CreateAsset (tempMesh, AssetDatabase.GenerateUniqueAssetPath (DEFAULT_PATH + current.name+ ".asset"));
-			}
-
 			if (vpsRefreshCounter > vpsRefreshDelay)
 			{
 				delayedVPS = current.GetModifiedVertsPerSecond ();
@@ -56,6 +50,21 @@ public class ModifierObjectEditor : Editor
 			}
 
 			EditorGUILayout.LabelField ("\tVerts Modded/second ~ " + delayedVPS);
+
+			if (GUILayout.Button ("Save Mesh"))
+			{
+				Mesh tempMesh = (Mesh)UnityEngine.Object.Instantiate (current.Mesh);
+				AssetDatabase.CreateAsset (tempMesh, AssetDatabase.GenerateUniqueAssetPath (DEFAULT_PATH + current.name + ".asset"));
+			}
+
+			if (!current.update)
+			{
+				if (GUILayout.Button ("Apply Modifiers"))
+				{
+					current.ModifyAll ();
+					current.ApplyModifications ();
+				}
+			}
 		}
 	}
 }
