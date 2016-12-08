@@ -34,31 +34,57 @@ namespace MeshModifiers
 		#region Public Properties
 
 		[Header ("General")]
+
 		public bool update = true;
 
-		[Range (0f, 1f)]
-		public float modifierStrength = 1f;
+		[Range (0f, 1f)] public float modifierStrength = 1f;
+
 
 		[Header ("Surface")]
-		[Tooltip ("When set to Low Quality, the smooothing angle is not taken into account. High Quality is very expensive and shouldn't be used every frame, if possible. You can call RefreshSurfaces manually to calculate High Quality normals at the time of your choosing.")]
-		public NormalsType recalcNormals = NormalsType.LowQuality;
-		[Range (0f, 180f), Tooltip ("The smoothing angle is only used when calculation is high quality. The mesh can never be less smooth than the imported mesh.")]
+
+		[Tooltip (MeshModifierConstants.NORMALS_QUALITY_TOOLTIP)]
+		public NormalsQuality normalQuality = NormalsQuality.LowQuality;
+
+		[Range (0f, 180f), Tooltip (MeshModifierConstants.SMOOTHING_ANGLE_TOOLTIP)]
 		public float smoothingAngle = 60f;
 
+
 		[Header ("Performance")]
-		[Tooltip ("Only performs modifications when this object is being rendered by the camera.")]
+
+		[System.NonSerialized, Tooltip (MeshModifierConstants.UPDATE_WHEN_HIDDEN_TOOLTIP)]
 		public bool updateWhenHidden = false;
 
-		[Range (1, MeshModifierConstants.MAX_MOD_FRAMES), Tooltip ("Performs the modification over this number of frames.")]
+		[Range (1, MeshModifierConstants.MAX_MOD_FRAMES), Tooltip (MeshModifierConstants.MODIFY_FRAMES_TOOLTIP)]
 		public int modifyFrames = 1;
+
+
 
 		[System.NonSerialized]
 		public List<MeshModifierBase> modifiers = new List<MeshModifierBase> ();
+
+		[System.NonSerialized]
+		public bool refreshModifiersEveryFrame = true;
+
+		/// <summary>
+		/// Updated based on Unity's OnWillRenderObject and OnBecameVisible.
+		/// </summary>
+		public bool isVisible { get; private set; }
+
+		/// <summary>
+		/// The index that corresponds the current chunk of vertices being modified.
+		/// </summary>
+		public int currentModifiedChunkIndex { get; private set; }
 
 		/// <summary>
 		/// Local to the modifier object. Used to sync modifications that occur over multiple frames and require a time value.
 		/// </summary>
 		public float Time { get; private set; }
+
+		#endregion
+
+
+
+		#region Backed Properties
 
 		private MeshFilter filter;
 		public MeshFilter Filter
@@ -88,18 +114,14 @@ namespace MeshModifiers
 
 
 
-		#region private Properties
+		#region Private Properties
 
-		private bool isVisible = false;
+		private bool modifyingChunk = false;
 
-		private bool
-			refreshModifiersEveryFrame = true,
-			modifyingChunk = false;
-
-		protected Vector3[] baseVertices;
-		protected Vector3[] modifiedVertices;
-		protected Vector3[] baseNormals;
-		protected Vector3[] modifiedNormals;
+		private Vector3[] baseVertices;
+		private Vector3[] modifiedVertices;
+		private Vector3[] baseNormals;
+		private Vector3[] modifiedNormals;
 
 		#endregion
 
@@ -110,14 +132,8 @@ namespace MeshModifiers
 		void Awake ()
 		{
 			Filter = GetComponent<MeshFilter> ();
-			Mesh = Filter.mesh;
-			Mesh.MarkDynamic ();
 
-			baseVertices = (Vector3[])Mesh.vertices.Clone ();
-			modifiedVertices = (Vector3[])Mesh.vertices.Clone ();
-
-			baseNormals = (Vector3[])Mesh.normals.Clone ();
-			modifiedNormals = (Vector3[])Mesh.normals.Clone ();
+			ChangeMesh (Filter.mesh);
 		}
 
 		void Start ()
@@ -140,16 +156,64 @@ namespace MeshModifiers
 
 
 
-		#region Utility Methods
+		#region Main Methods
 
 		/// <summary>
-		/// Reverts any changes made to the vertices and their normals.
+		/// A safe way to change the modified mesh.
 		/// </summary>
-		public void ResetModdedVerticesandNormals ()
+		/// <param name="newMesh"></param>
+		public void ChangeMesh (Mesh newMesh)
+		{
+			Filter.mesh = newMesh;
+			Mesh = Filter.mesh;
+			Mesh.MarkDynamic ();
+
+			baseVertices = (Vector3[])Filter.sharedMesh.vertices.Clone ();
+			baseNormals = (Vector3[])Filter.sharedMesh.normals.Clone ();
+			ResetVerticesAndNormals ();
+		}
+
+		/// <summary>
+		/// Recalculates normals.
+		/// </summary>
+		public void RefreshSurface (NormalsQuality normalsQuality)
+		{
+			if (normalsQuality == NormalsQuality.None)
+				return;
+
+			switch (normalsQuality)
+			{
+				case NormalsQuality.LowQuality:
+					Mesh.RecalculateNormals ();
+					break;
+				case NormalsQuality.HighQuality:
+					Mesh.RecalculateNormals (smoothingAngle);
+					break;
+			}
+		}
+
+		/// <summary>
+		/// Updates the list of modifiers, including their order of execution.
+		/// </summary>
+		public void RefreshModifiers ()
+		{
+			modifiers = GetComponents<MeshModifierBase> ().ToList ();
+		}
+
+		/// <summary>
+		/// Reverts any changes made to the vertices and their normals, and updates the base vertices and normals in case custom code has changed the mesh.
+		/// </summary>
+		private void ResetVerticesAndNormals ()
 		{
 			modifiedVertices = (Vector3[])baseVertices.Clone ();
 			modifiedNormals = (Vector3[])baseNormals.Clone ();
 		}
+
+		#endregion
+
+
+
+		#region Utility Methods
 
 		/// <summary>
 		/// Returns the number of vertices and handles missing references
@@ -199,24 +263,9 @@ namespace MeshModifiers
 		}
 
 		/// <summary>
-		/// Recalculates normals.
+		/// Returns the current state of the modified vertices.
 		/// </summary>
-		public void RefreshSurface (NormalsType normalsQuality)
-		{
-			if (normalsQuality == NormalsType.None)
-				return;
-
-			switch (normalsQuality)
-			{
-				case NormalsType.LowQuality:
-					Mesh.RecalculateNormals ();
-					break;
-				case NormalsType.HighQuality:
-					Mesh.RecalculateNormals (smoothingAngle);
-					break;
-			}
-		}
-
+		/// <returns></returns>
 		public Vector3[] GetCurrentVerts ()
 		{
 			return modifiedVertices.Clone () as Vector3[];
@@ -240,7 +289,7 @@ namespace MeshModifiers
 		/// Returns an array of modifiers that wants to be used.
 		/// </summary>
 		/// <returns></returns>
-		public int[] FindUseableModifiers ()
+		public int[] GetUseableModifiers ()
 		{
 			List<int> modIndexes = new List<int> ();
 
@@ -257,14 +306,6 @@ namespace MeshModifiers
 			}
 
 			return modIndexes.ToArray ();
-		}
-
-		/// <summary>
-		/// Updates the list of modifiers, including their order of execution.
-		/// </summary>
-		public void RefreshModifiers ()
-		{
-			modifiers = GetComponents<MeshModifierBase> ().ToList ();
 		}
 
 		/// <summary>
@@ -356,59 +397,63 @@ namespace MeshModifiers
 		{
 			while (true)
 			{
-				if (CanModify ()/* && modifyFrames > 1*/)
+				if (!CanModify ())
+					yield return null;
+
+				// The current chunk index starts at zero.
+				currentModifiedChunkIndex = 0;
+
+				// Store the number of splits in a local variable so that if modifyFrames is changed before the modifications are complete, nothing will get messed up.
+				int chunks = modifyFrames;
+				// Find the approximate number of vertices in a single split.
+				int chunkSize = Mesh.vertexCount / chunks;
+
+				// Increment time based on how much approximate time will have passed when the mods are done.
+				Time += UnityEngine.Time.deltaTime * chunks;
+
+				int[] useableModifierIndexes = GetUseableModifiers ();
+				InvokePreMods (useableModifierIndexes);
+
+				// For each chunk...
+				for (int currentChunkIndex = 0; currentChunkIndex < chunks; currentChunkIndex++)
 				{
-					// Store the number of splits in a local variable so that if modifyFrames is changed before the modifications are complete, nothing will get messed up.
-					int chunks = modifyFrames;
-					// Find the approximate number of vertices in a single split.
-					int chunkSize = Mesh.vertexCount / chunks;
+					if (refreshModifiersEveryFrame)
+						RefreshModifiers ();
 
-					// Increment time based on how much approximate time will have passed when the mods are done.
-					Time += UnityEngine.Time.deltaTime * chunks;
+					// A chunk of the mesh is about to be modified, so modifyingChunk must be true.
+					modifyingChunk = true;
 
-					int[] useableModifierIndexes = FindUseableModifiers ();
-					InvokePreMods (useableModifierIndexes);
-
-					// For each split...
-					for (int currentChunkIndex = 0; currentChunkIndex < chunks; currentChunkIndex++)
+					// For each vertice in the current chunk... If the current split is the last split, find the remaining vertices (in case of a vertex count that can't be split perfectly) and add them to the vertices to loop through.
+					for (int currentVert = chunkSize * currentChunkIndex; currentVert < chunkSize * (currentChunkIndex + 1) + ((currentChunkIndex + 1 == chunks) ? CalcVertRemainder (GetVertCount (), chunkSize, chunks) : 0); currentVert++)
 					{
-						if (refreshModifiersEveryFrame)
-							RefreshModifiers ();
+						// Make sure we won't try to access any modifiers that have been deleted since the last chunk was modded.
+						useableModifierIndexes = GetUseableModifiers ();
 
-						// A chunk of the mesh is about to be modified, so modifyingChunk must be true.
-						modifyingChunk = true;
+						// For each modifier...
+						for (int currentMod = 0; currentMod < useableModifierIndexes.Length; currentMod++)
+							modifiedVertices[currentVert] = modifiers[useableModifierIndexes[currentMod]].ModifyOffset (modifiedVertices[currentVert], modifiedNormals[currentVert]);
 
-						// For each vertice in the current split... If the current split is the last split, find the remaining vertices (in case of a vertex count that can't be split perfectly) and add them to the vertices to loop through.
-						for (int currentVert = chunkSize * currentChunkIndex; currentVert < chunkSize * (currentChunkIndex + 1) + ((currentChunkIndex + 1 == chunks) ? CalcVertRemainder (GetVertCount (), chunkSize, chunks) : 0); currentVert++)
-						{
-							// Make sure we won't try to access any modifiers that have been deleted since the last chunk was modded.
-							useableModifierIndexes = FindUseableModifiers ();
-
-							// For each modifier...
-							for (int currentMod = 0; currentMod < useableModifierIndexes.Length; currentMod++)
-								modifiedVertices[currentVert] = modifiers[useableModifierIndexes[currentMod]].ModifyOffset (modifiedVertices[currentVert], modifiedNormals[currentVert]);
-
-							PostModPointOperation (currentVert);
-						}
-
-						// The current chunk's modifications are finished so modifyingChunk as false.
-						modifyingChunk = false;
-
-						// Wait a frame.
-						yield return null;
+						PostModPointOperation (currentVert);
 					}
 
-					// Update the mesh's vertices to reflect the modified vertices.
-					Mesh.SetVertices (modifiedVertices.ToList ());
+					// The current chunk's modifications are finished so modifyingChunk is false and the next chunk will start being processed.
+					modifyingChunk = false;
+					currentModifiedChunkIndex++;
 
-					// Reset the modded vertices to their base state so next frames modifications are based on the original vertices.
-					ResetModdedVerticesandNormals ();
-
-					RefreshSurface (recalcNormals);
-					Mesh.RecalculateBounds ();
-				}
-				else
+					// Wait a frame.
 					yield return null;
+				}
+
+				// Update the mesh's vertices to reflect the modified vertices.
+				Mesh.SetVertices (modifiedVertices.ToList ());
+
+				// Update the normals.
+				RefreshSurface (normalQuality);
+
+				Mesh.RecalculateBounds ();
+
+				// Reset the modded vertices to their base state so next frames modifications are based on the original vertices.
+				ResetVerticesAndNormals ();
 			}
 		}
 

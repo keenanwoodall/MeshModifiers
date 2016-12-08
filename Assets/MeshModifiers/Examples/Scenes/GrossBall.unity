@@ -105,42 +105,13 @@ GameObject:
   - component: {fileID: 318751928}
   - component: {fileID: 318751927}
   - component: {fileID: 318751926}
-  - component: {fileID: 318751925}
-  - component: {fileID: 318751924}
-  - component: {fileID: 318751933}
   m_Layer: 0
-  m_Name: ModifierMesh
+  m_Name: Graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &318751924
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 318751923}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30acd521f5ebc924f9f94d62ffff1d55, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  globalSpeed: 1
-  axialSpeed: {x: 5, y: 5, z: 5}
---- !u!114 &318751925
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 318751923}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b187ed3b35e12c4ebf1e8207453fe19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  variance: 0.1
-  speed: 1
 --- !u!114 &318751926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,7 +124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   update: 1
-  useWorldPosition: 1
+  useWorldPosition: 0
   spherical: 1
   speed: {x: 0.1, y: 0.1, z: 0.1}
   magnitude: {x: 0.1, y: 0.1, z: 0.1}
@@ -182,15 +153,15 @@ MonoBehaviour:
   xAxis:
     amplitude: 0.05
     frequency: 6
-    type: 0
+    trigType: 0
   yAxis:
     amplitude: 0.05
     frequency: 6
-    type: 0
+    trigType: 0
   zAxis:
     amplitude: 0.05
     frequency: 6
-    type: 0
+    trigType: 0
   useWorldPos: 1
   radial: 0
 --- !u!114 &318751928
@@ -210,15 +181,15 @@ MonoBehaviour:
   xAxis:
     amplitude: 0.05
     frequency: 6
-    type: 0
+    trigType: 0
   yAxis:
     amplitude: 0.05
     frequency: 6
-    type: 0
+    trigType: 0
   zAxis:
     amplitude: 0.05
     frequency: 6
-    type: 0
+    trigType: 0
   useWorldPos: 1
   radial: 0
 --- !u!114 &318751929
@@ -234,10 +205,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   update: 1
   modifierStrength: 1
-  recalcNormals: 1
+  normalQuality: 1
   smoothingAngle: 60
-  recalcTangents: 0
-  updateWhenHidden: 0
   modifyFrames: 3
 --- !u!23 &318751930
 MeshRenderer:
@@ -283,19 +252,37 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 318751923}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_Father: {fileID: 400237937}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &318751933
+--- !u!1 &400237933
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 400237937}
+  - component: {fileID: 400237936}
+  - component: {fileID: 400237935}
+  - component: {fileID: 400237934}
+  m_Layer: 0
+  m_Name: GrossBall
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &400237934
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 318751923}
+  m_GameObject: {fileID: 400237933}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5feb083fbf29fbd4d9ba5d9c2691e6e9, type: 3}
@@ -305,6 +292,46 @@ MonoBehaviour:
   verticalSpeed: 50
   deaccelerationTime: 0.25
   maxSpeed: 2
+--- !u!114 &400237935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 400237933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30acd521f5ebc924f9f94d62ffff1d55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  globalSpeed: 1
+  axialSpeed: {x: 5, y: 5, z: 5}
+--- !u!114 &400237936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 400237933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b187ed3b35e12c4ebf1e8207453fe19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  variance: 0.1
+  speed: 1
+--- !u!4 &400237937
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 400237933}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 318751932}
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1165505204
 Prefab:
   m_ObjectHideFlags: 0

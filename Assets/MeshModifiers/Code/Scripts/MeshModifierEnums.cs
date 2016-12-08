@@ -1,1 +1,1 @@
-﻿public enum NormalsType { HighQuality, LowQuality, None }
+﻿public enum NormalsQuality { HighQuality, LowQuality, None }
