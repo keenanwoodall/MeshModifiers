@@ -157,22 +157,31 @@ namespace MeshModifiers
 		#region Main Methods
 
 		/// <summary>
-		/// Modifies the whole mesh, as one chunk. If the parameter 'modifierIndexes' is null it will be set using GetUseableModifiers;
+		/// Modifies the whole mesh, as one chunk.
 		/// [HINT]: This method only changes the internal data, call ApplyModifications for the mesh data to reflect the internal data.
 		/// </summary>
-		/// <param name="modifierIndexes"></param>
-		public void ModifyAll (int[] modifierIndexes = null)
+		public void ModifyAll ()
+		{
+			ModifyChunk (0, baseVertices.Length, null);
+		}
+
+		/// <summary>
+		/// Modifies the whole mesh, as one chunk.
+		/// [HINT]: This method only changes the internal data, call ApplyModifications for the mesh data to reflect the internal data.
+		/// </summary>
+		/// <param name="modifierIndexes">Represent indexes of modifiers in the 'modifiers' list that will be applied to the mesh.</param>
+		public void ModifyAll (int[] modifierIndexes)
 		{
 			ModifyChunk (0, baseVertices.Length, modifierIndexes);
 		}
 
 		/// <summary>
-		/// Modifies chunk of the mesh. If the parameter, modifierIndexes, is null it will be set using GetUseableModifiers. 
+		/// Modifies chunk of the mesh. If modifiersIndexes is null, all useable modifiers will be applied.
 		/// [HINT]: This method only changes the internal data, call ApplyModifications for the mesh data to reflect the internal data.
 		/// </summary>
 		/// <param name="startIndex"></param>
 		/// <param name="stopIndex"></param>
-		/// <param name="modifierIndexes"></param>
+		/// <param name="modifierIndexes">Represent indexes of modifiers in the 'modifiers' list that will be applied to the chunk.</param>
 		public void ModifyChunk (int startIndex, int stopIndex, int[] modifierIndexes = null)
 		{
 			// If modifierIndexes are not supplied, use all useabled modifiers.
