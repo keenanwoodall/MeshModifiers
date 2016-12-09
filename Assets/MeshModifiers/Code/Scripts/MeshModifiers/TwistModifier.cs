@@ -9,10 +9,31 @@ public class TwistModifier : MeshModifierBase
 
 	public Vector3 twist = Vector3.zero;
 
+	public AnimationCurve
+		xStrength = new AnimationCurve (new Keyframe(0f, 0f), new Keyframe (0.5f, 1f), new Keyframe (1f, 0f)),
+		yStrength = new AnimationCurve (new Keyframe (0f, 0f), new Keyframe (0.5f, 1f), new Keyframe (1f, 0f)),
+		zStrength = new AnimationCurve (new Keyframe (0f, 0f), new Keyframe (0.5f, 1f), new Keyframe (1f, 0f));
+
 	#endregion
 
 
+
+	#region Private Properties
+
+	private Bounds bounds;
+
+	#endregion
+
+
+
 	#region Inherited Methods
+
+	public override void PreMod ()
+	{
+		base.PreMod ();
+
+		bounds = modObject.GetBaseBounds ();
+	}
 
 	protected override Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal)
 	{
@@ -22,6 +43,7 @@ public class TwistModifier : MeshModifierBase
 		if (twist.x != 0.0f)
 		{
 			angle = v.x * twist.x;
+			angle *= xStrength.Evaluate(Mathf.InverseLerp (-bounds.extents.x, bounds.extents.x, v.x));
 			cos = Mathf.Cos (angle);
 			sin = Mathf.Sin (angle);
 
@@ -32,6 +54,7 @@ public class TwistModifier : MeshModifierBase
 		if (twist.y != 0.0f)
 		{
 			angle = v.y * twist.y;
+			angle *= yStrength.Evaluate (Mathf.InverseLerp (-bounds.extents.y, bounds.extents.y, v.y));
 			cos = Mathf.Cos (angle);
 			sin = Mathf.Sin (angle);
 
@@ -42,6 +65,7 @@ public class TwistModifier : MeshModifierBase
 		if (twist.z != 0.0f)
 		{
 			angle = v.z * twist.z;
+			angle *= zStrength.Evaluate (Mathf.InverseLerp (-bounds.extents.z, bounds.extents.z, v.z));
 			cos = Mathf.Cos (angle);
 			sin = Mathf.Sin (angle);
 
