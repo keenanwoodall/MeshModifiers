@@ -6,8 +6,6 @@ public class SquashAndStretchModifier : MeshModifierBase
 {
 	#region Public Properties
 
-	public Vector3 direction = Vector3.up;
-
 	public float amount = 1f;
 
 	public bool inWorldSpace = true;
@@ -30,6 +28,19 @@ public class SquashAndStretchModifier : MeshModifierBase
 
 
 
+	#region Backed Properties
+
+	[SerializeField]
+	private Vector3 skewRotation;
+	public Vector3 SkewDirection
+	{
+		get { return Quaternion.Euler (skewRotation) * ((inWorldSpace) ? Vector3.forward : transform.forward); }
+	}
+
+	#endregion
+
+
+
 	#region Inherited Methods
 
 	public override void PreMod ()
@@ -37,9 +48,9 @@ public class SquashAndStretchModifier : MeshModifierBase
 		base.PreMod ();
 
 		if (inWorldSpace)
-			scaleAxisX = transform.worldToLocalMatrix.MultiplyPoint3x4 (direction);
+			scaleAxisX = transform.worldToLocalMatrix.MultiplyPoint3x4 (SkewDirection);
 		else
-			scaleAxisX = direction;
+			scaleAxisX = SkewDirection;
 
 		Vector3.OrthoNormalize (ref scaleAxisX, ref scaleAxisY, ref scaleAxisZ);
 
@@ -48,20 +59,37 @@ public class SquashAndStretchModifier : MeshModifierBase
 		scaleSpace.SetRow (2, scaleAxisZ);
 		scaleSpace[3, 3] = 1f;
 
+		if (!inWorldSpace)
+			scaleSpace *= Matrix4x4.TRS (Vector3.zero, modObject.transform.rotation, Vector3.one);
+
 		meshSpace = scaleSpace.inverse;
 	}
 
 	protected override Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal)
 	{
+		if (Mathf.Approximately (amount, 0f))
+			return basePosition;
+
 		Vector3 basePositionOnAxis = scaleSpace.MultiplyPoint3x4 (basePosition);
-		float nonZeroAmount = (Mathf.Abs (amount) > 0.001f) ? amount : ((amount > 0f) ? 0.001f : -0.001f);
+		float amountPlus1 = amount + 1f;
 
-
-		basePositionOnAxis.x *= nonZeroAmount;
-		basePositionOnAxis.y *= 1f / nonZeroAmount;
-		basePositionOnAxis.z *= 1f / nonZeroAmount;
+		basePositionOnAxis.x *= amountPlus1;
+		basePositionOnAxis.y *= 1f / amountPlus1;
+		basePositionOnAxis.z *= 1f / amountPlus1;
 
 		return meshSpace.MultiplyPoint3x4 (basePositionOnAxis);
+	}
+
+	#endregion
+
+
+
+	#region Unity Methods
+
+	void OnValidate ()
+	{
+		if (amount <= -0.9f)
+			amount = -0.89f;
 	}
 
 	#endregion
