@@ -35,7 +35,7 @@ namespace MeshModifiers
 
 		[Header ("General")]
 
-		public bool update = true;
+		public bool autoUpdate = true;
 
 		[Range (0f, 1f)] public float modifierStrength = 1f;
 
@@ -202,8 +202,6 @@ namespace MeshModifiers
 			// If modifierIndexes are not supplied, use all useabled modifiers.
 			if (modifierIndexes == null)
 				modifierIndexes = GetUseableModifiers ();
-
-			Debug.Log ("Chunk size: " + (stopIndex - startIndex).ToString());
 
 			// For each vertex in this chunk...
 			for (int currentVert = startIndex; currentVert < stopIndex; currentVert++)
@@ -414,7 +412,7 @@ namespace MeshModifiers
 		/// <returns></returns>
 		private bool CanModify ()
 		{
-			return (isVisible || updateWhenHidden) && update;
+			return (isVisible || updateWhenHidden) && autoUpdate;
 		}
 
 		/// <summary>

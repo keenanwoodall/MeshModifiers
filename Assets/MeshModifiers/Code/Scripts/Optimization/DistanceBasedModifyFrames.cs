@@ -35,7 +35,7 @@ public class DistanceBasedModifyFrames : MonoBehaviour
 
 	void Update ()
 	{
-		if (target == null || modObject == null || !modObject.update)
+		if (target == null || modObject == null || !modObject.autoUpdate)
 			return;
 
 		float distance = Vector3.Distance (modObject.transform.position, target.position);

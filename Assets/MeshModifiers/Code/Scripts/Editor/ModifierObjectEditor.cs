@@ -57,7 +57,7 @@ public class ModifierObjectEditor : Editor
 				AssetDatabase.CreateAsset (tempMesh, AssetDatabase.GenerateUniqueAssetPath (DEFAULT_PATH + current.name + ".asset"));
 			}
 
-			if (!current.update)
+			if (!current.autoUpdate)
 			{
 				if (GUILayout.Button ("Apply Modifiers"))
 				{
