@@ -61,7 +61,7 @@ public class ModifierObjectEditor : Editor
 			{
 				if (GUILayout.Button ("Apply Modifiers"))
 				{
-					current.ModifyAll ();
+					current.ModifyAll (invokePreMods: true, invokePostMods: true);
 					current.ApplyModifications ();
 				}
 			}

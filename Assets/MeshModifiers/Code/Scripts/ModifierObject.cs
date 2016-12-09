@@ -160,9 +160,17 @@ namespace MeshModifiers
 		/// Modifies the whole mesh, as one chunk.
 		/// [HINT]: This method only changes the internal data, call ApplyModifications for the mesh data to reflect the internal data.
 		/// </summary>
-		public void ModifyAll ()
+		public void ModifyAll (bool invokePreMods = true, bool invokePostMods = false)
 		{
-			ModifyChunk (0, baseVertices.Length, null);
+			int[] useableModifiers = GetUseableModifiers ();
+
+			if (invokePreMods)
+				InvokePreMods (useableModifiers);
+
+			ModifyChunk (0, baseVertices.Length, useableModifiers);
+
+			if (invokePostMods)
+				InvokePostMods (useableModifiers);
 		}
 
 		/// <summary>
@@ -170,14 +178,21 @@ namespace MeshModifiers
 		/// [HINT]: This method only changes the internal data, call ApplyModifications for the mesh data to reflect the internal data.
 		/// </summary>
 		/// <param name="modifierIndexes">Represent indexes of modifiers in the 'modifiers' list that will be applied to the mesh.</param>
-		public void ModifyAll (int[] modifierIndexes)
+		public void ModifyAll (int[] modifierIndexes, bool invokePreMods = true, bool invokePostMods = false)
 		{
+			if (invokePreMods)
+				InvokePreMods (modifierIndexes);
+
 			ModifyChunk (0, baseVertices.Length, modifierIndexes);
+
+			if (invokePostMods)
+				InvokePostMods (modifierIndexes);
 		}
 
 		/// <summary>
 		/// Modifies chunk of the mesh. If modifiersIndexes is null, all useable modifiers will be applied.
 		/// [HINT]: This method only changes the internal data, call ApplyModifications for the mesh data to reflect the internal data.
+		/// [HINT]: Any modifiers that inherit the PreMod or PostMod method won't work without InvokePreMods and/or InvokePostMods being called. This allows you to call those methods once (before a set of chunks are processed), rather than everytime you change a chunk.
 		/// </summary>
 		/// <param name="startIndex"></param>
 		/// <param name="stopIndex"></param>
@@ -187,6 +202,8 @@ namespace MeshModifiers
 			// If modifierIndexes are not supplied, use all useabled modifiers.
 			if (modifierIndexes == null)
 				modifierIndexes = GetUseableModifiers ();
+
+			Debug.Log ("Chunk size: " + (stopIndex - startIndex).ToString());
 
 			// For each vertex in this chunk...
 			for (int currentVert = startIndex; currentVert < stopIndex; currentVert++)
@@ -349,6 +366,7 @@ namespace MeshModifiers
 		/// <returns></returns>
 		public int[] GetUseableModifiers ()
 		{
+			RefreshModifiers ();
 			List<int> modIndexes = new List<int> ();
 
 			for (int i = 0; i < modifiers.Count; i++)
