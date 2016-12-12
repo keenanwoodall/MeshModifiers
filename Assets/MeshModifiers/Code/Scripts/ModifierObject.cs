@@ -37,8 +37,7 @@ namespace MeshModifiers
 
 		public bool autoUpdate = true;
 
-		[Range (0f, 1f)]
-		public float modifierStrength = 1f;
+		[Range (0f, 1f)] public float modifierStrength = 1f;
 
 
 		[Header ("Surface")]
@@ -384,12 +383,21 @@ namespace MeshModifiers
 		}
 
 		/// <summary>
-		/// Returns the bounds of the original mesh.
+		/// Returns the bounds of the mesh in its current state.
 		/// </summary>
 		/// <returns></returns>
 		public Bounds GetBounds ()
 		{
-			return new Bounds (Filter.mesh.bounds.center, Filter.mesh.bounds.size);
+			return new Bounds (Mesh.bounds.center, Mesh.bounds.size);
+		}
+
+		/// <summary>
+		/// Returns the bounds of the original mesh.
+		/// </summary>
+		/// <returns></returns>
+		public Bounds GetBaseBounds ()
+		{
+			return new Bounds (Filter.sharedMesh.bounds.center, Filter.sharedMesh.bounds.size);
 		}
 
 		#endregion
@@ -493,10 +501,7 @@ namespace MeshModifiers
 						yield return null;
 					}
 
-					// Update the mesh to reflect the new modifications.
 					ApplyModifications ();
-
-					InvokePostMods (GetUseableModifiers ());
 				}
 				else
 					yield return null;
