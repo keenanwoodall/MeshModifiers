@@ -32,7 +32,7 @@ public class TwistModifier : MeshModifierBase
 	{
 		base.PreMod ();
 
-		bounds = modObject.GetBaseBounds ();
+		bounds = modObject.GetBounds ();
 	}
 
 	protected override Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal)
