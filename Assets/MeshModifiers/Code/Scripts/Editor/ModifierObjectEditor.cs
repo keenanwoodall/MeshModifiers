@@ -65,6 +65,12 @@ public class ModifierObjectEditor : Editor
 					current.ApplyModifications ();
 				}
 			}
+
+			if (current.normalQuality == NormalsQuality.None)
+			{
+				if (GUILayout.Button ("Recalculate Normals"))
+					current.RefreshSurface (NormalsQuality.HighQuality);
+			}
 		}
 	}
 }
