@@ -99,7 +99,7 @@ namespace MeshModifiers
 			set { filter = value; }
 		}
 
-		private Mesh mesh;
+		/*private Mesh mesh;
 		public Mesh Mesh
 		{
 			get
@@ -110,6 +110,20 @@ namespace MeshModifiers
 			}
 			set { mesh = value; }
 		}
+		*/
+
+		[SerializeField]
+		private VertexDataArray data;
+		public VertexDataArray Data
+		{
+			get
+			{
+				if (data == null)
+					data = new VertexDataArray (Filter.mesh);
+				return data;
+			}
+			private set { data = value; }
+		}
 
 		#endregion
 
@@ -117,10 +131,10 @@ namespace MeshModifiers
 
 		#region Private Properties
 
-		private Vector3[] baseVertices;
+		/*private Vector3[] baseVertices;
 		private Vector3[] modifiedVertices;
 		private Vector3[] baseNormals;
-		private Vector3[] modifiedNormals;
+		private Vector3[] modifiedNormals;*/
 
 		#endregion
 
@@ -168,7 +182,7 @@ namespace MeshModifiers
 			if (invokePreMods)
 				InvokePreMods (useableModifiers);
 
-			ModifyChunk (0, baseVertices.Length, useableModifiers);
+			ModifyChunk (0, Data.vertices.Length, useableModifiers);
 
 			if (invokePostMods)
 				InvokePostMods (useableModifiers);
@@ -184,7 +198,7 @@ namespace MeshModifiers
 			if (invokePreMods)
 				InvokePreMods (modifierIndexes);
 
-			ModifyChunk (0, baseVertices.Length, modifierIndexes);
+			ModifyChunk (0, Data.vertices.Length, modifierIndexes);
 
 			if (invokePostMods)
 				InvokePostMods (modifierIndexes);
@@ -209,7 +223,7 @@ namespace MeshModifiers
 			{
 				// For each modifier...
 				for (int currentMod = 0; currentMod < modifierIndexes.Length; currentMod++)
-					modifiedVertices[currentVert] = modifiers[modifierIndexes[currentMod]].ModifyOffset (modifiedVertices[currentVert], modifiedNormals[currentVert]);
+					Data.vertices[currentVert].CurrentPosition = modifiers[modifierIndexes[currentMod]].ModifyOffset (Data.vertices[currentVert].CurrentPosition, Data.vertices[currentVert].CurrentNormal);
 
 				PostModPointOperation (currentVert);
 			}
@@ -221,12 +235,13 @@ namespace MeshModifiers
 		public void ApplyModifications ()
 		{
 			// Update the mesh's vertices to reflect the modified vertices.
-			Mesh.SetVertices (modifiedVertices.ToList ());
+			//Mesh.SetVertices (modifiedVertices.ToList ());
+			Data.SetMeshToVertexData ();
 
 			// Update the normals.
 			RefreshSurface (normalQuality);
 
-			Mesh.RecalculateBounds ();
+			Data.mesh.RecalculateBounds ();
 
 			// Reset the modded vertices to their base state so next frames modifications are based on the original vertices.
 			ResetVerticesAndNormals ();
@@ -239,11 +254,12 @@ namespace MeshModifiers
 		public void ChangeMesh (Mesh newMesh)
 		{
 			Filter.mesh = newMesh;
-			Mesh = Filter.mesh;
-			Mesh.MarkDynamic ();
+			Data.ChangeMesh (Filter.mesh);
+			Data.mesh.MarkDynamic ();
 
-			baseVertices = (Vector3[])Filter.sharedMesh.vertices.Clone ();
-			baseNormals = (Vector3[])Filter.sharedMesh.normals.Clone ();
+			/*baseVertices = (Vector3[])Filter.sharedMesh.vertices.Clone ();
+			baseNormals = (Vector3[])Filter.sharedMesh.normals.Clone ();*/
+
 			ResetVerticesAndNormals ();
 		}
 
@@ -258,10 +274,14 @@ namespace MeshModifiers
 			switch (normalsQuality)
 			{
 				case NormalsQuality.LowQuality:
-					Mesh.RecalculateNormals ();
+					Data.mesh.RecalculateNormals ();
 					break;
 				case NormalsQuality.HighQuality:
-					Mesh.RecalculateNormals (smoothingAngle);
+					Data.mesh.RecalculateNormals (smoothingAngle);
+					break;
+				case NormalsQuality.HighQualityOnce:
+					Data.mesh.RecalculateNormals (smoothingAngle);
+					normalQuality = NormalsQuality.None;
 					break;
 			}
 		}
@@ -279,8 +299,7 @@ namespace MeshModifiers
 		/// </summary>
 		private void ResetVerticesAndNormals ()
 		{
-			modifiedVertices = (Vector3[])baseVertices.Clone ();
-			modifiedNormals = (Vector3[])baseNormals.Clone ();
+			Data.ResetCurrentData ();
 		}
 
 		#endregion
@@ -342,7 +361,7 @@ namespace MeshModifiers
 		/// <returns></returns>
 		public Vector3[] GetCurrentVerts ()
 		{
-			return modifiedVertices.Clone () as Vector3[];
+			return Data.GetCurrentPositionsArray ().Clone () as Vector3[];
 		}
 
 		/// <summary>
@@ -442,11 +461,11 @@ namespace MeshModifiers
 		/// <summary>
 		/// This is where any final modifications will be performed.
 		/// </summary>
-		/// <param name="currentVertex"></param>
-		private void PostModPointOperation (int currentVertex)
+		/// <param name="index"></param>
+		private void PostModPointOperation (int index)
 		{
 			if (!Mathf.Approximately (modifierStrength, 1f))
-				modifiedVertices[currentVertex] = Vector3.Lerp (baseVertices[currentVertex], modifiedVertices[currentVertex], modifierStrength);
+				Data.vertices[index].CurrentPosition = Vector3.Lerp (Data.vertices[index].UnModifiedPosition, Data.vertices[index].CurrentPosition, modifierStrength);
 		}
 
 		#endregion
@@ -471,7 +490,7 @@ namespace MeshModifiers
 					// Store the number of splits in a local variable so that if modifyFrames is changed before the modifications are complete, nothing will get messed up.
 					int chunks = modifyFrames;
 					// Find the approximate number of vertices in a single split.
-					int chunkSize = Mesh.vertexCount / chunks;
+					int chunkSize = Data.mesh.vertexCount / chunks;
 
 					// Increment time based on how much approximate time will have passed when the mods are done.
 					Time += UnityEngine.Time.deltaTime * chunks;

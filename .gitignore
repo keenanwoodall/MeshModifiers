@@ -29,3 +29,5 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+Private
+Assets/Private.meta

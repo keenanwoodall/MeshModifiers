@@ -53,7 +53,7 @@ public class ModifierObjectEditor : Editor
 
 			if (GUILayout.Button ("Save Mesh"))
 			{
-				Mesh tempMesh = (Mesh)UnityEngine.Object.Instantiate (current.Mesh);
+				Mesh tempMesh = (Mesh)UnityEngine.Object.Instantiate (current.Data.mesh);
 				AssetDatabase.CreateAsset (tempMesh, AssetDatabase.GenerateUniqueAssetPath (DEFAULT_PATH + current.name + ".asset"));
 			}
 
