@@ -19,7 +19,7 @@ public class ZoomFOV : MonoBehaviour
 
 	void Update ()
 	{
-		if (Input.GetKey (KeyCode.LeftAlt) && Input.GetMouseButton (0))
+		if (Input.GetKey (KeyCode.LeftAlt) && Input.GetMouseButton (0) && !Input.GetMouseButton (1))
 			t += Input.GetAxis ("Mouse X") * speed * Time.deltaTime;
 
 		Camera.main.fieldOfView = Mathf.Lerp (max, min, t);

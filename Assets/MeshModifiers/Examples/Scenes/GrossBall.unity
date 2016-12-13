@@ -524,7 +524,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 318751923}
-  m_Mesh: {fileID: 4300000, guid: 416e1829aad9b7846969b9f0841ce32e, type: 3}
+  m_Mesh: {fileID: 4300000, guid: d9df457105695ca40a0ec3d419017cdd, type: 3}
 --- !u!4 &318751932
 Transform:
   m_ObjectHideFlags: 0
@@ -1170,6 +1170,10 @@ Prefab:
       propertyPath: m_Mode
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1000012343427962, guid: d930c255761a19c4999397d3fc9d491a, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d930c255761a19c4999397d3fc9d491a, type: 2}
   m_IsPrefabParent: 0
@@ -1493,9 +1497,9 @@ RectTransform:
   m_Father: {fileID: 2109694495}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 285, y: 320.62}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 285, y: -219.38}
   m_SizeDelta: {x: 570, y: 439}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1841297678
