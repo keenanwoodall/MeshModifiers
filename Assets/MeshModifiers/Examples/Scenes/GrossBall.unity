@@ -625,6 +625,7 @@ GameObject:
   - component: {fileID: 400237934}
   - component: {fileID: 400237938}
   - component: {fileID: 400237939}
+  - component: {fileID: 400237940}
   m_Layer: 0
   m_Name: GrossBall
   m_TagString: Untagged
@@ -715,6 +716,17 @@ MonoBehaviour:
   strength: 1
   noiseModifiers:
   - {fileID: 318751926}
+--- !u!114 &400237940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 400237933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53172749a5929d24cb44ca9cb649c4ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &486886640
 GameObject:
   m_ObjectHideFlags: 0
