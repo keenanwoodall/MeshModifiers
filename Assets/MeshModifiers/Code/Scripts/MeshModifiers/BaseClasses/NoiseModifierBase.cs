@@ -36,11 +36,25 @@ namespace MeshModifiers
 			useWorldPosition = false,
 			spherical = true;
 
-		public Vector3
-			speed = Vector3.one,
-			magnitude = Vector3.one / 10;
+		public Vector3 speed = Vector3.one;
 
 		public float sampleScale = 1f;
+
+		public float magnitudeMultiplier = 1f;
+
+		#endregion
+
+
+
+		#region Backed Properties
+
+		[SerializeField]
+		private Vector3 magnitude = Vector3.one / 10;
+		public Vector3 Magnitude
+		{
+			get { return magnitude * magnitudeMultiplier; }
+			set { magnitude = value; }
+		}
 
 		#endregion
 
@@ -60,35 +74,14 @@ namespace MeshModifiers
 		protected Vector3 FormatValue (float value, Vector3 basePosition)
 		{
 			if (spherical)
-				return Vectorx.Multiply (basePosition, Vector3.one + (value * magnitude));
+				return Vectorx.Multiply (basePosition, Vector3.one + (value * Magnitude));
 			else
-				return basePosition + new Vector3 (value * magnitude.x, value * magnitude.y, value * magnitude.z) - magnitude;
+				return basePosition + new Vector3 (value * Magnitude.x, value * Magnitude.y, value * Magnitude.z) - magnitude;
 		}
 
 		protected Vector3 FormatValue (Vector3 value, Vector3 basePosition)
 		{
-			return Vectorx.Multiply (basePosition, Vector3.one + Vectorx.Multiply (value, magnitude));
-		}
-
-		public override void DrawEditorGUI ()
-		{
-			base.DrawEditorGUI ();
-
-			useWorldPosition = GUILayout.Toggle (useWorldPosition, "Use World Position");
-			spherical = GUILayout.Toggle (spherical, "Spherical");
-
-			GUILayout.Label ("Animation Speed (x, y, z)");
-			speed.x = GUILayout.HorizontalSlider (speed.x, 0f, 5f);
-			speed.y = GUILayout.HorizontalSlider (speed.y, 0f, 5f);
-			speed.z = GUILayout.HorizontalSlider (speed.z, 0f, 5f);
-
-			GUILayout.Label ("Magnitude (x, y, z)");
-			magnitude.x = GUILayout.HorizontalSlider (magnitude.x, 0f, 1f);
-			magnitude.y = GUILayout.HorizontalSlider (magnitude.y, 0f, 1f);
-			magnitude.z = GUILayout.HorizontalSlider (magnitude.z, 0f, 1f);
-
-			GUILayout.Label ("Sample Scale");
-			sampleScale = GUILayout.HorizontalSlider (sampleScale, 0.1f, 2f);
+			return Vectorx.Multiply (basePosition, Vector3.one + Vectorx.Multiply (value, Magnitude));
 		}
 
 		#endregion

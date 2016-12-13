@@ -28,15 +28,16 @@ public class LerpPositionFromMouse : MonoBehaviour
 	void Start ()
 	{
 		basePosition = transform.position;
+		offsetPosition = basePosition;
 	}
 
 	void Update ()
 	{
 		transform.position = Vector3.Lerp (transform.position, offsetPosition, speed * Time.deltaTime);
 
-		if (requires == InputRequirement.MouseDown && !Input.GetMouseButton (0))
+		if (requires == InputRequirement.MouseDown && (!Input.GetMouseButton (0) || !Input.GetMouseButton (1)))
 			return;
-		else if (requires == InputRequirement.MouseUp && Input.GetMouseButton (0))
+		else if (requires == InputRequirement.MouseUp && (Input.GetMouseButton (0) || Input.GetMouseButton (1)))
 			return;
 
 		Vector3 mousePosition = Input.mousePosition;

@@ -29,7 +29,7 @@ MonoBehaviour:
     m_Settings:
       method: 0
       fxaaSettings:
-        preset: 2
+        preset: 1
       taaSettings:
         jitterSpread: 0.75
         sharpen: 0.3
@@ -46,7 +46,7 @@ MonoBehaviour:
       ambientOnly: 0
       highPrecision: 0
   screenSpaceReflection:
-    m_Enabled: 1
+    m_Enabled: 0
     m_Settings:
       reflection:
         blendType: 1

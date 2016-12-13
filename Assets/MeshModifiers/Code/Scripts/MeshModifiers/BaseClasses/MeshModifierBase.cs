@@ -79,11 +79,6 @@ namespace MeshModifiers
 
 		protected abstract Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal);
 
-		public virtual void DrawEditorGUI ()
-		{
-			update = GUILayout.Toggle (update, "Update");
-		}
-
 		#endregion
 	}
 }
