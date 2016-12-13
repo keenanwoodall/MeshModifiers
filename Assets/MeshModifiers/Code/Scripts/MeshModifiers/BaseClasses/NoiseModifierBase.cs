@@ -36,6 +36,7 @@ namespace MeshModifiers
 			useWorldPosition = false,
 			spherical = true;
 
+		public Vector3 offset = Vector3.zero;
 		public Vector3 speed = Vector3.one;
 
 		public float sampleScale = 1f;
@@ -64,7 +65,7 @@ namespace MeshModifiers
 
 		protected Vector3 GetSampleCoordinate (Vector3 basePosition)
 		{
-			Vector3 coordinate = (basePosition + (speed * modObject.Time)) * sampleScale;
+			Vector3 coordinate = (basePosition + (speed * modObject.Time) + offset) * sampleScale;
 			if (useWorldPosition)
 				coordinate += transform.position;
 

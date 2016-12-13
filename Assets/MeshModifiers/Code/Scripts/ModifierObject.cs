@@ -263,6 +263,10 @@ namespace MeshModifiers
 				case NormalsQuality.HighQuality:
 					Mesh.RecalculateNormals (smoothingAngle);
 					break;
+				case NormalsQuality.HighQualityOnce:
+					Mesh.RecalculateNormals (smoothingAngle);
+					normalQuality = NormalsQuality.None;
+					break;
 			}
 		}
 
