@@ -1188,6 +1188,10 @@ Prefab:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1000011348443632, guid: d930c255761a19c4999397d3fc9d491a, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d930c255761a19c4999397d3fc9d491a, type: 2}
   m_IsPrefabParent: 0
@@ -1273,6 +1277,10 @@ Prefab:
     - target: {fileID: 183190, guid: e9a6501da28be2b4986e8ba47c2e017c, type: 2}
       propertyPath: m_Name
       value: DustParticles
+      objectReference: {fileID: 0}
+    - target: {fileID: 183190, guid: e9a6501da28be2b4986e8ba47c2e017c, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e9a6501da28be2b4986e8ba47c2e017c, type: 2}
@@ -1591,6 +1599,10 @@ Prefab:
     - target: {fileID: 114000011005595612, guid: 500d285f46139d745a7f8704abee31c1,
         type: 2}
       propertyPath: recalcNormals
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000013305940998, guid: 500d285f46139d745a7f8704abee31c1, type: 2}
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

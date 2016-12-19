@@ -156,7 +156,7 @@ namespace MeshModifiers
 
 		void Start ()
 		{
-			ChangeMesh (Filter.mesh);
+			ChangeMesh (Filter.sharedMesh);
 			RefreshModifiers ();
 
 			StartCoroutine (AutoApplyModifiers ());
