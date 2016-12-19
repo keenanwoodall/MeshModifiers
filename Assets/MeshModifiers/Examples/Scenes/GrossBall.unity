@@ -383,6 +383,7 @@ GameObject:
   - component: {fileID: 318751928}
   - component: {fileID: 318751927}
   - component: {fileID: 318751926}
+  - component: {fileID: 318751924}
   m_Layer: 0
   m_Name: Graphics
   m_TagString: Untagged
@@ -390,6 +391,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &318751924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 318751923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b142d683222650343be9c17fe62d57ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sampleSize: 10
 --- !u!114 &318751926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -404,6 +417,7 @@ MonoBehaviour:
   update: 1
   useWorldPosition: 0
   spherical: 1
+  offset: {x: 0, y: 0, z: 0}
   speed: {x: 0.1, y: 0.1, z: 0.1}
   sampleScale: 1
   magnitudeMultiplier: 1
@@ -486,7 +500,7 @@ MonoBehaviour:
   modifierStrength: 1
   normalQuality: 1
   smoothingAngle: 60
-  modifyFrames: 2
+  modifyFrames: 1
 --- !u!23 &318751930
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -67,7 +67,7 @@ namespace MeshModifiers
 		{
 			Vector3 coordinate = (basePosition + (speed * modObject.Time) + offset) * sampleScale;
 			if (useWorldPosition)
-				coordinate += transform.position;
+				coordinate += modObject._transform.position;
 
 			return coordinate;
 		}
@@ -77,7 +77,7 @@ namespace MeshModifiers
 			if (spherical)
 				return Vectorx.Multiply (basePosition, Vector3.one + (value * Magnitude));
 			else
-				return basePosition + new Vector3 (value * Magnitude.x, value * Magnitude.y, value * Magnitude.z) - magnitude;
+				return basePosition + (value * Magnitude) - Magnitude;
 		}
 
 		protected Vector3 FormatValue (Vector3 value, Vector3 basePosition)

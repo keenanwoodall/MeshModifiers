@@ -31,3 +31,10 @@ sysinfo.txt
 *.unitypackage
 Assets/Private.meta
 Private
+Assets/MeshModifiers/Code/Scripts/Private.meta
+uIntelliSense
+uIntelliSense.meta
+FlipbookGames
+FlipbookGames.meta
+QHierarchy
+QHierarchy.meta

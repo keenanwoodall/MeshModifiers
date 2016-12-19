@@ -12,7 +12,9 @@
 
 		#region Editor Constants
 
-		public const string ADD_COMP_BASE_NAME = "Mesh Modifier/";
+		public const string 
+			ADD_COMP_BASE_NAME = "Mesh Modifier/",
+			ADD_COMP_DEBUG_NAME = ADD_COMP_BASE_NAME + "Debug/";
 
 		public const string
 			NORMALS_QUALITY_TOOLTIP = "When set to Low Quality, the smooothing angle is not taken into account. High Quality is very expensive and shouldn't be used every frame, if possible. You can call RefreshSurfaces manually to calculate High Quality normals at the time of your choosing.",
