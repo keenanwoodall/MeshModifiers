@@ -22,6 +22,7 @@
 	*/
 
 using UnityEngine;
+using UnityEngine.Events;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -67,19 +68,37 @@ namespace MeshModifiers
 		public bool refreshModifiersEveryFrame = true;
 
 		/// <summary>
+		/// Cached transform.
+		/// </summary>
+		public Transform _transform { get; private set; }
+
+		/// <summary>
 		/// Updated based on Unity's OnWillRenderObject and OnBecameVisible.
 		/// </summary>
-		public bool isVisible { get; private set; }
+		public bool IsVisible { get; private set; }
 
 		/// <summary>
 		/// The index that corresponds the current chunk of vertices being modified.
 		/// </summary>
-		public int currentModifiedChunkIndex { get; private set; }
+		public int CurrentModifiedChunkIndex { get; private set; }
 
 		/// <summary>
 		/// Local to the modifier object. Used to sync modifications that occur over multiple frames and require a time value.
 		/// </summary>
 		public float Time { get; private set; }
+		public long ExecutionTime { get; private set; }
+
+		/// <summary>
+		/// Invoked before modifiers are auto-applied.
+		/// </summary>
+		[System.NonSerialized]
+		public UnityEvent OnAutoUpdateStart = new UnityEvent ();
+
+		/// <summary>
+		/// Invoked after modifiers are auto-applied.
+		/// </summary>
+		[System.NonSerialized]
+		public UnityEvent OnAutoUpdateFinish = new UnityEvent ();
 
 		#endregion
 
@@ -130,25 +149,27 @@ namespace MeshModifiers
 
 		void Awake ()
 		{
-			Filter = GetComponent<MeshFilter> ();
+			_transform = transform;
 
-			ChangeMesh (Filter.mesh);
+			Filter = GetComponent<MeshFilter> ();
 		}
 
 		void Start ()
 		{
+			ChangeMesh (Filter.mesh);
 			RefreshModifiers ();
+
 			StartCoroutine (AutoApplyModifiers ());
 		}
 
 		void OnWillRenderObject ()
 		{
-			isVisible = true;
+			IsVisible = true;
 		}
 
 		void OnBecameInvisible ()
 		{
-			isVisible = false;
+			IsVisible = false;
 		}
 
 		#endregion
@@ -408,7 +429,7 @@ namespace MeshModifiers
 		/// <returns></returns>
 		private bool CanModify ()
 		{
-			return (isVisible || updateWhenHidden) && autoUpdate;
+			return (IsVisible || updateWhenHidden) && autoUpdate;
 		}
 
 		/// <summary>
@@ -469,8 +490,10 @@ namespace MeshModifiers
 			{
 				if (CanModify ())
 				{
+					OnAutoUpdateStart.Invoke ();
+
 					// The current chunk index starts at zero.
-					currentModifiedChunkIndex = 0;
+					CurrentModifiedChunkIndex = 0;
 
 					// Store the number of splits in a local variable so that if modifyFrames is changed before the modifications are complete, nothing will get messed up.
 					int chunks = modifyFrames;
@@ -491,7 +514,7 @@ namespace MeshModifiers
 						ModifyChunk (chunkSize * currentChunkIndex, chunkSize * (currentChunkIndex + 1) + ((currentChunkIndex + 1 == chunks) ? CalcVertRemainder (GetVertCount (), chunkSize, chunks) : 0), GetUseableModifiers ());
 
 						// The current chunk's modifications are finished so the next chunk will start being processed.
-						currentModifiedChunkIndex++;
+						CurrentModifiedChunkIndex++;
 
 						// Wait a frame.
 						yield return null;
@@ -501,6 +524,8 @@ namespace MeshModifiers
 					ApplyModifications ();
 
 					InvokePostMods (GetUseableModifiers ());
+
+					OnAutoUpdateFinish.Invoke ();
 				}
 				else
 					yield return null;
