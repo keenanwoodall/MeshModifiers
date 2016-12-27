@@ -6,9 +6,9 @@ public class SquashAndStretchModifier : MeshModifierBase
 {
 	#region Public Properties
 
-	public float amount = 1f;
+	public float amount = 0f;
 
-	public bool inWorldSpace = true;
+	public bool inWorldSpace = false;
 
 	#endregion
 
@@ -31,7 +31,7 @@ public class SquashAndStretchModifier : MeshModifierBase
 	#region Backed Properties
 
 	[SerializeField]
-	private Vector3 skewRotation;
+	private Vector3 skewRotation = new Vector3 (90f, 0f, 0f);
 	public Vector3 SkewDirection
 	{
 		get { return Quaternion.Euler (skewRotation) * ((inWorldSpace) ? Vector3.forward : transform.forward); }

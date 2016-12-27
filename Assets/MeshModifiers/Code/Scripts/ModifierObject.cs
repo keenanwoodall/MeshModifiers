@@ -429,7 +429,7 @@ namespace MeshModifiers
 		/// <returns></returns>
 		private bool CanModify ()
 		{
-			return (IsVisible || updateWhenHidden) && autoUpdate;
+			return (IsVisible || updateWhenHidden) && autoUpdate && GetUseableModifiers ().Length > 0;
 		}
 
 		/// <summary>
