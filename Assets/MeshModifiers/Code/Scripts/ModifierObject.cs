@@ -32,9 +32,7 @@ namespace MeshModifiers
 	[RequireComponent (typeof (MeshFilter))]
 	public class ModifierObject : MonoBehaviour
 	{
-		#region Public Properties
-
-		[Header ("General")]
+		#region Fields
 
 		public bool autoUpdate = true;
 
@@ -42,16 +40,12 @@ namespace MeshModifiers
 		public float modifierStrength = 1f;
 
 
-		[Header ("Surface")]
-
 		[Tooltip (MeshModifierConstants.NORMALS_QUALITY_TOOLTIP)]
 		public NormalsQuality normalQuality = NormalsQuality.LowQuality;
 
 		[Range (0f, 180f), Tooltip (MeshModifierConstants.SMOOTHING_ANGLE_TOOLTIP)]
 		public float smoothingAngle = 60f;
 
-
-		[Header ("Performance")]
 
 		[System.NonSerialized, Tooltip (MeshModifierConstants.UPDATE_WHEN_HIDDEN_TOOLTIP)]
 		public bool updateWhenHidden = false;
@@ -66,6 +60,29 @@ namespace MeshModifiers
 
 		[System.NonSerialized]
 		public bool refreshModifiersEveryFrame = true;
+
+		/// <summary>
+		/// Invoked before modifiers are auto-applied.
+		/// </summary>
+		[System.NonSerialized]
+		public UnityEvent OnAutoUpdateStart = new UnityEvent ();
+
+		/// <summary>
+		/// Invoked after modifiers are auto-applied.
+		/// </summary>
+		[System.NonSerialized]
+		public UnityEvent OnAutoUpdateFinish = new UnityEvent ();
+
+		private Vector3[] baseVertices;
+		private Vector3[] modifiedVertices;
+		private Vector3[] baseNormals;
+		private Vector3[] modifiedNormals;
+
+		#endregion
+
+
+
+		#region Properties
 
 		/// <summary>
 		/// Cached transform.
@@ -87,24 +104,6 @@ namespace MeshModifiers
 		/// </summary>
 		public float Time { get; private set; }
 		public long ExecutionTime { get; private set; }
-
-		/// <summary>
-		/// Invoked before modifiers are auto-applied.
-		/// </summary>
-		[System.NonSerialized]
-		public UnityEvent OnAutoUpdateStart = new UnityEvent ();
-
-		/// <summary>
-		/// Invoked after modifiers are auto-applied.
-		/// </summary>
-		[System.NonSerialized]
-		public UnityEvent OnAutoUpdateFinish = new UnityEvent ();
-
-		#endregion
-
-
-
-		#region Backed Properties
 
 		private MeshFilter filter;
 		public MeshFilter Filter
@@ -129,17 +128,6 @@ namespace MeshModifiers
 			}
 			set { mesh = value; }
 		}
-
-		#endregion
-
-
-
-		#region Private Properties
-
-		private Vector3[] baseVertices;
-		private Vector3[] modifiedVertices;
-		private Vector3[] baseNormals;
-		private Vector3[] modifiedNormals;
 
 		#endregion
 

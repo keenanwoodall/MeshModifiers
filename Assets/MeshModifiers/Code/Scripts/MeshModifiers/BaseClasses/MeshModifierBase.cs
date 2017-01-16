@@ -28,15 +28,9 @@ namespace MeshModifiers
 	[RequireComponent (typeof (ModifierObject))]
 	public abstract class MeshModifierBase : MonoBehaviour
 	{
-		#region Public Properties
+		#region Fields
 
 		public bool update = true;
-
-		#endregion
-
-
-
-		#region Private Properties
 
 		protected ModifierObject modObject;
 		private Mesh mesh;
@@ -45,7 +39,7 @@ namespace MeshModifiers
 
 
 
-		#region Unity Methods
+		#region Monobehaviour Methods
 
 		void Awake ()
 		{
