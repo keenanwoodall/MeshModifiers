@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace MeshModifiers
 {
-	//[AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "FFD")]
+	[AddComponentMenu (MeshModifierConstants.ADD_EXPERIMENTAL_COMP_NAME + "FFD")]
 	public class FreeFormDeformer : MeshModifierBase
 	{
-		#region Public Properties
+		#region Fields
 
 		public Transform
 			left,
@@ -19,6 +19,10 @@ namespace MeshModifiers
 		public Vector3 size;
 
 		#endregion
+
+
+
+		#region Monobehaviour Methods
 
 		void Start ()
 		{
@@ -38,6 +42,10 @@ namespace MeshModifiers
 
 			Gizmos.DrawWireCube (modObject.GetBounds ().center, modObject.GetBounds ().size);
 		}
+
+		#endregion
+
+
 
 		#region Inherited Methods
 

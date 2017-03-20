@@ -7,8 +7,7 @@ public class ExponentModifier : MeshModifierBase
 {
 	#region Public Properties
 
-	public Vector3
-		value = Vector3.zero;
+	public Vector3 value = Vector3.zero;
 
 	public bool absolute = true;
 
@@ -24,7 +23,7 @@ public class ExponentModifier : MeshModifierBase
 
 		value.x = value.x < 0f ? 0f : value.x;
 		value.y = value.y < 0f ? 0f : value.y;
-		value.z = value.z < 0f ? 0f : value.x;
+		value.z = value.z < 0f ? 0f : value.z;
 	}
 
 	protected override Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal)
