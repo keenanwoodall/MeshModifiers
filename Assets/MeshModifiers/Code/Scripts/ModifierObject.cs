@@ -219,7 +219,7 @@ namespace MeshModifiers
 		public void ModifyChunk (int startIndex, int stopIndex, int[] modifierIndexes = null)
 		{
 			// If modifierIndexes are not supplied, use all useabled modifiers.
-			if (modifierIndexes == null || modifierIndexes.Length == 0)
+			if (modifierIndexes == null)
 				modifierIndexes = GetUseableModifiers ();
 
 			// For each vertex in this chunk...
