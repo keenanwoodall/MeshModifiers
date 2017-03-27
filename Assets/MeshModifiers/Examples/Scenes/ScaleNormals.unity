@@ -284,10 +284,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e45ae1c3552a63488206348514feeeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoUpdate: 1
+  update: 1
   modifierStrength: 1
-  normalQuality: 1
+  recalcNormals: 1
   smoothingAngle: 60
+  recalcTangents: 0
+  updateWhenHidden: 0
   modifyFrames: 1
 --- !u!23 &1542702020
 MeshRenderer:

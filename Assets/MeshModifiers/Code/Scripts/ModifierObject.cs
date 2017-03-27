@@ -54,7 +54,8 @@ namespace MeshModifiers
 		public int modifyFrames = 1;
 
 
-		//[System.NonSerialized]
+
+		[System.NonSerialized]
 		public List<MeshModifierBase> modifiers = new List<MeshModifierBase> ();
 
 		[System.NonSerialized]
@@ -148,6 +149,7 @@ namespace MeshModifiers
 
 			StartCoroutine (AutoApplyModifiers ());
 		}
+
 		void OnWillRenderObject ()
 		{
 			IsVisible = true;
@@ -344,7 +346,7 @@ namespace MeshModifiers
 		/// <returns></returns>
 		public int GetModifiedVertsPerSecond ()
 		{
-			return (int)(60f * (GetModifiedVertsPerFrame () * (1f/UnityEngine.Time.deltaTime)));
+			return (int)(60f * (GetModifiedVertsPerFrame () * UnityEngine.Time.deltaTime));
 		}
 
 		/// <summary>
@@ -415,7 +417,7 @@ namespace MeshModifiers
 		/// <returns></returns>
 		private bool CanModify ()
 		{
-			return (IsVisible || updateWhenHidden) && autoUpdate;
+			return (IsVisible || updateWhenHidden) && autoUpdate && GetUseableModifiers ().Length > 0;
 		}
 
 		/// <summary>

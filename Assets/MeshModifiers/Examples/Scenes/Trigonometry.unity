@@ -127,15 +127,15 @@ MonoBehaviour:
   xAxis:
     amplitude: 0.16
     frequency: 3.21
-    trigType: 0
+    type: 0
   yAxis:
     amplitude: 0
     frequency: 0.5
-    trigType: 0
+    type: 0
   zAxis:
     amplitude: 0
     frequency: 0.5
-    trigType: 0
+    type: 0
   useWorldPos: 0
   radial: 0
 --- !u!114 &440143767
@@ -149,12 +149,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e45ae1c3552a63488206348514feeeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoUpdate: 1
+  update: 1
   modifierStrength: 1
-  normalQuality: 3
+  recalcNormals: 1
   smoothingAngle: 60
+  recalcTangents: 0
+  updateWhenHidden: 0
   modifyFrames: 1
-  modifiers: []
 --- !u!23 &440143768
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -397,15 +398,15 @@ MonoBehaviour:
   xAxis:
     amplitude: 0.16
     frequency: 3.21
-    trigType: 0
+    type: 0
   yAxis:
     amplitude: 0
     frequency: 0.5
-    trigType: 0
+    type: 0
   zAxis:
     amplitude: 0
     frequency: 0.5
-    trigType: 0
+    type: 0
   useWorldPos: 0
   radial: 1
 --- !u!114 &1905230945
@@ -419,12 +420,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e45ae1c3552a63488206348514feeeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoUpdate: 1
+  update: 1
   modifierStrength: 1
-  normalQuality: 3
+  recalcNormals: 1
   smoothingAngle: 60
+  recalcTangents: 0
+  updateWhenHidden: 0
   modifyFrames: 1
-  modifiers: []
 --- !u!23 &1905230946
 MeshRenderer:
   m_ObjectHideFlags: 0

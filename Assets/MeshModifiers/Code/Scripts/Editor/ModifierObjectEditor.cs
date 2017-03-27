@@ -49,7 +49,7 @@ public class ModifierObjectEditor : Editor
 				vpsRefreshCounter = 0f;
 			}
 
-			EditorGUILayout.LabelField ("\tVerts Modded/second ~ " + (delayedVPS / 100000) + " million");
+			EditorGUILayout.LabelField ("\tVerts Modded/second ~ " + delayedVPS);
 
 			if (GUILayout.Button ("Save Mesh"))
 			{
