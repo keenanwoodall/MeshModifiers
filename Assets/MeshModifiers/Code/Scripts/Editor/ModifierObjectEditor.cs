@@ -41,33 +41,36 @@ public class ModifierObjectEditor : Editor
 		EditorGUILayout.LabelField ("\tVerts Modded/frame - " + current.GetModifiedVertsPerFrame ());
 
 		vpsRefreshCounter += deltaTime;
-		if (vpsRefreshCounter > vpsRefreshDelay)
+		if (Application.isPlaying)
 		{
-			delayedVPS = current.GetModifiedVertsPerSecond ();
-			vpsRefreshCounter = 0f;
-		}
-
-		EditorGUILayout.LabelField ("\tVerts Modded/second ~ " + (delayedVPS / 100000) + " million");
-
-		if (GUILayout.Button ("Save Mesh"))
-		{
-			Mesh tempMesh = (Mesh)Object.Instantiate (current.Mesh);
-			AssetDatabase.CreateAsset (tempMesh, AssetDatabase.GenerateUniqueAssetPath (DEFAULT_PATH + current.name + ".asset"));
-		}
-
-		if (!current.autoUpdate || !Application.isPlaying)
-		{
-			if (GUILayout.Button ("Apply Modifiers"))
+			if (vpsRefreshCounter > vpsRefreshDelay)
 			{
-				current.ModifyAll (invokePreMods: true, invokePostMods: true);
-				current.ApplyModifications ();
+				delayedVPS = current.GetModifiedVertsPerSecond ();
+				vpsRefreshCounter = 0f;
 			}
-		}
 
-		if (current.normalQuality == NormalsQuality.None)
-		{
-			if (GUILayout.Button ("Recalculate Normals"))
-				current.RefreshSurface (NormalsQuality.HighQuality);
+			EditorGUILayout.LabelField ("\tVerts Modded/second ~ " + (delayedVPS / 100000) + " million");
+
+			if (GUILayout.Button ("Save Mesh"))
+			{
+				Mesh tempMesh = (Mesh)Object.Instantiate (current.Mesh);
+				AssetDatabase.CreateAsset (tempMesh, AssetDatabase.GenerateUniqueAssetPath (DEFAULT_PATH + current.name + ".asset"));
+			}
+
+			if (!current.autoUpdate)
+			{
+				if (GUILayout.Button ("Apply Modifiers"))
+				{
+					current.ModifyAll (invokePreMods: true, invokePostMods: true);
+					current.ApplyModifications ();
+				}
+			}
+
+			if (current.normalQuality == NormalsQuality.None)
+			{
+				if (GUILayout.Button ("Recalculate Normals"))
+					current.RefreshSurface (NormalsQuality.HighQuality);
+			}
 		}
 	}
 }

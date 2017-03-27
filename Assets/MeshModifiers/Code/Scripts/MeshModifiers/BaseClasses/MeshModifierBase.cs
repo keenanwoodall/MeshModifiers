@@ -26,7 +26,6 @@ using UnityEngine;
 namespace MeshModifiers
 {
 	[RequireComponent (typeof (ModifierObject))]
-	[ExecuteInEditMode]
 	public abstract class MeshModifierBase : MonoBehaviour
 	{
 		#region Fields
@@ -45,17 +44,6 @@ namespace MeshModifiers
 		void Awake ()
 		{
 			modObject = GetComponent<ModifierObject> ();
-		}
-
-		private void OnValidate ()
-		{
-			if (modObject == null)
-				modObject = GetComponent<ModifierObject> ();
-			if (modObject != null && modObject.autoUpdate)
-			{
-				modObject.ModifyAll (invokePreMods: true, invokePostMods: true);
-				modObject.ApplyModifications ();
-			}
 		}
 
 		#endregion

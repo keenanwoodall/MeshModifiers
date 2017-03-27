@@ -12,7 +12,7 @@ public class PerlinModifier : NoiseModifierBase
 
 	#endregion
 
-	
+
 
 	#region Inherited Methods
 

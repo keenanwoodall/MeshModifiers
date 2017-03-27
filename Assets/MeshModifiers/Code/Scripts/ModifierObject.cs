@@ -30,7 +30,6 @@ using System.Collections.Generic;
 namespace MeshModifiers
 {
 	[RequireComponent (typeof (MeshFilter))]
-	[ExecuteInEditMode]
 	public class ModifierObject : MonoBehaviour
 	{
 		#region Fields
@@ -73,10 +72,10 @@ namespace MeshModifiers
 		[System.NonSerialized]
 		public UnityEvent OnAutoUpdateFinish = new UnityEvent ();
 
-		private Vector3[] baseVertices = new Vector3[] { };
-		private Vector3[] modifiedVertices = new Vector3[] { };
-		private Vector3[] baseNormals = new Vector3[] { };
-		private Vector3[] modifiedNormals = new Vector3[] { };
+		private Vector3[] baseVertices;
+		private Vector3[] modifiedVertices;
+		private Vector3[] baseNormals;
+		private Vector3[] modifiedNormals;
 
 		#endregion
 
@@ -123,8 +122,7 @@ namespace MeshModifiers
 			get
 			{
 				if (mesh == null)
-					if (filter != null)
-						mesh = filter.mesh;
+					mesh = filter.mesh;
 				return mesh;
 			}
 			set { mesh = value; }
@@ -158,15 +156,6 @@ namespace MeshModifiers
 		void OnBecameInvisible ()
 		{
 			IsVisible = false;
-		}
-
-		private void OnValidate ()
-		{
-			if (autoUpdate)
-			{
-				ModifyAll (invokePreMods: true, invokePostMods: true);
-				ApplyModifications ();
-			}
 		}
 
 		#endregion
@@ -246,7 +235,6 @@ namespace MeshModifiers
 
 			Mesh.RecalculateBounds ();
 
-			Filter.sharedMesh = mesh;
 			// Reset the modded vertices to their base state so next frames modifications are based on the original vertices.
 			ResetVerticesAndNormals ();
 		}
@@ -257,9 +245,9 @@ namespace MeshModifiers
 		/// <param name="newMesh"></param>
 		public void ChangeMesh (Mesh newMesh)
 		{
-			Mesh = Instantiate (Filter.sharedMesh) as Mesh;
+			Filter.mesh = newMesh;
+			Mesh = Filter.mesh;
 			Mesh.MarkDynamic ();
-			Filter.sharedMesh = newMesh;
 
 			baseVertices = (Vector3[])Filter.sharedMesh.vertices.Clone ();
 			baseNormals = (Vector3[])Filter.sharedMesh.normals.Clone ();
@@ -412,7 +400,7 @@ namespace MeshModifiers
 		/// <returns></returns>
 		public Bounds GetBounds ()
 		{
-			return new Bounds (Filter.sharedMesh.bounds.center, Filter.sharedMesh.bounds.size);
+			return new Bounds (Filter.mesh.bounds.center, Filter.mesh.bounds.size);
 		}
 
 		#endregion
