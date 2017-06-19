@@ -37,7 +37,7 @@ namespace MeshModifiers
 			spherical = true;
 
 		public Vector3 offset = Vector3.zero;
-		public Vector3 speed = Vector3.one;
+		public Vector3 speed = Vector3.zero;
 
 		public float sampleScale = 1f;
 

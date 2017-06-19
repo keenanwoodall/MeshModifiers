@@ -30,8 +30,6 @@ public class TwistModifier : MeshModifierBase
 
 	public override void PreMod ()
 	{
-		base.PreMod ();
-
 		bounds = modObject.GetBounds ();
 	}
 
