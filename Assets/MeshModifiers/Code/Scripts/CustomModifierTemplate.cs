@@ -23,7 +23,7 @@ public class CustomModifierTemplate : MeshModifierBase
 		You also have access to the ModifierObject, which handles this modifier along with any other ones attached to the same GameObject.
 		From there you can info you might need.
 
-		For example, Time.deltaTime doesn't work very well when calculations need to take place over multiple frames. If you want a value to animate over time, use modObject.Time!
+		For example, Time.time doesn't work very well when calculations need to take place over multiple frames. If you want a value to animate over time, use modObject.Time!
 
 		*/
 

@@ -4,16 +4,9 @@ using MeshModifiers;
 [AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "Squash and Stretch")]
 public class SquashAndStretchModifier : MeshModifierBase
 {
-	#region Public Properties
-
 	public float amount = 0f;
 
 	public bool inWorldSpace = false;
-
-	#endregion
-
-
-	#region Private Properties
 
 	private Matrix4x4
 		scaleSpace,
@@ -24,12 +17,6 @@ public class SquashAndStretchModifier : MeshModifierBase
 		scaleAxisY,
 		scaleAxisZ;
 
-	#endregion
-
-
-
-	#region Backed Properties
-
 	[SerializeField]
 	private Vector3 skewRotation = new Vector3 (90f, 0f, 0f);
 	public Vector3 SkewDirection
@@ -37,20 +24,17 @@ public class SquashAndStretchModifier : MeshModifierBase
 		get { return Quaternion.Euler (skewRotation) * ((inWorldSpace) ? Vector3.forward : transform.forward); }
 	}
 
-	#endregion
-
-
-
-	#region Inherited Methods
-
+	private void OnValidate ()
+	{
+		if (amount <= -0.9f)
+			amount = -0.89f;
+	}
+	
 	public override void PreMod ()
 	{
 		base.PreMod ();
 
-		if (inWorldSpace)
-			scaleAxisX = transform.worldToLocalMatrix.MultiplyPoint3x4 (SkewDirection);
-		else
-			scaleAxisX = SkewDirection;
+		scaleAxisX = inWorldSpace ? transform.worldToLocalMatrix.MultiplyPoint3x4 (SkewDirection) : SkewDirection;
 
 		Vector3.OrthoNormalize (ref scaleAxisX, ref scaleAxisY, ref scaleAxisZ);
 
@@ -70,8 +54,8 @@ public class SquashAndStretchModifier : MeshModifierBase
 		if (Mathf.Approximately (amount, 0f))
 			return basePosition;
 
-		Vector3 basePositionOnAxis = scaleSpace.MultiplyPoint3x4 (basePosition);
-		float amountPlus1 = amount + 1f;
+		var basePositionOnAxis = scaleSpace.MultiplyPoint3x4 (basePosition);
+		var amountPlus1 = amount + 1f;
 
 		basePositionOnAxis.x *= amountPlus1;
 		basePositionOnAxis.y *= 1f / amountPlus1;
@@ -79,18 +63,4 @@ public class SquashAndStretchModifier : MeshModifierBase
 
 		return meshSpace.MultiplyPoint3x4 (basePositionOnAxis);
 	}
-
-	#endregion
-
-
-
-	#region Unity Methods
-
-	void OnValidate ()
-	{
-		if (amount <= -0.9f)
-			amount = -0.89f;
-	}
-
-	#endregion
 }

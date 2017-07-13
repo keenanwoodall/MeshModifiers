@@ -5,8 +5,6 @@ using MeshModifiers;
 [AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "Twist")]
 public class TwistModifier : MeshModifierBase
 {
-	#region Public Properties
-
 	public Vector3 twist = Vector3.zero;
 
 	public AnimationCurve
@@ -14,19 +12,7 @@ public class TwistModifier : MeshModifierBase
 		yStrength = new AnimationCurve (new Keyframe (0f, 0f), new Keyframe (0.5f, 1f), new Keyframe (1f, 0f)),
 		zStrength = new AnimationCurve (new Keyframe (0f, 0f), new Keyframe (0.5f, 1f), new Keyframe (1f, 0f));
 
-	#endregion
-
-
-
-	#region Private Properties
-
 	private Bounds bounds;
-
-	#endregion
-
-
-
-	#region Inherited Methods
 
 	public override void PreMod ()
 	{
@@ -35,7 +21,7 @@ public class TwistModifier : MeshModifierBase
 
 	protected override Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal)
 	{
-		Vector3 v = basePosition;
+		var v = basePosition;
 		float angle, cos, sin;
 
 		if (twist.x != 0.0f)
@@ -70,9 +56,6 @@ public class TwistModifier : MeshModifierBase
 			v.x = v.x * cos - v.y * sin;
 			v.y = v.y * cos + v.x * sin;
 		}
-
 		return v;
 	}
-
-	#endregion
 }

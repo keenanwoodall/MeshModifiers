@@ -9,13 +9,7 @@ namespace MeshModifiers
 		public int SampleSize
 		{
 			get { return sampleSize; }
-			set
-			{
-				if (value < 1)
-					sampleSize = 1;
-				else
-					sampleSize = value;
-			}
+			set { sampleSize = value < 1 ? 1 : value; }
 		}
 
 		public int CurrentSampleSize { get; private set; }
@@ -45,7 +39,7 @@ namespace MeshModifiers
 			CurrentSampleSize = samples.Count;
 			if (CurrentSampleSize > 2)
 			{
-				int medianIndex = CurrentSampleSize / 2;
+				var medianIndex = CurrentSampleSize / 2;
 				return (samples[medianIndex - 1] + samples[medianIndex] + samples[medianIndex + 1]) / 3;
 			}
 			else if (CurrentSampleSize == 2)
@@ -58,7 +52,7 @@ namespace MeshModifiers
 		{
 			double sampleSum = 0;
 
-			for (int i = 0; i < CurrentSampleSize; i++)
+			for (var i = 0; i < CurrentSampleSize; i++)
 				sampleSum += samples[i];
 
 			return sampleSum / CurrentSampleSize;

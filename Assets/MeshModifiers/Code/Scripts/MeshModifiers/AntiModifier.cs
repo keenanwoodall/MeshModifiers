@@ -8,25 +8,11 @@ namespace MeshModifiers
 	[AddComponentMenu (MeshModifierConstants.ADD_EXPERIMENTAL_COMP_NAME + "Anti Modifier")]
 	public class AntiModifier : MeshModifierBase
 	{
-		#region Public Properties
-
 		public Transform effector;
 
 		public float scale = 1f;
 
-		#endregion
-
-
-
-		#region Private Properties
-
 		private Vector3 localEffectorPosition;
-
-		#endregion
-
-
-
-		#region Inherited Methods
 
 		public override void PreMod ()
 		{
@@ -39,7 +25,5 @@ namespace MeshModifiers
 		{
 			throw new NotImplementedException ();
 		}
-
-		#endregion
 	}
 }

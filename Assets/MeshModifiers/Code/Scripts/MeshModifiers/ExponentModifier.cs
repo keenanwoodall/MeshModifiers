@@ -5,18 +5,8 @@ using MeshModifiers;
 [AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "Exponent")]
 public class ExponentModifier : MeshModifierBase
 {
-	#region Public Properties
-
-	public Vector3
-		value = Vector3.zero;
-
+	public Vector3 value = Vector3.zero;
 	public bool absolute = true;
-
-	#endregion
-
-
-
-	#region Inherited Methods
 
 	public override void PreMod ()
 	{
@@ -44,6 +34,4 @@ public class ExponentModifier : MeshModifierBase
 
 		return basePosition;
 	}
-
-	#endregion
 }

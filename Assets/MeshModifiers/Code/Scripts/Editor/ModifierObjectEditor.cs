@@ -5,14 +5,15 @@ using MeshModifiers;
 [CustomEditor (typeof (ModifierObject)), CanEditMultipleObjects]
 public class ModifierObjectEditor : Editor
 {
-	private readonly string DEFAULT_PATH = "Assets/";
-
+	private const string DEFAULT_PATH = "Assets/";
+	private const float VPS_REFRESH_DELAY = 1f;
+	
 	private ModifierObject current;
 
-	int delayedVPS;
-	float vpsRefreshCounter = 0;
-	float vpsRefreshDelay = 1f;
-	float
+	private int delayedVPS;
+	private float vpsRefreshCounter = 0;
+
+	private float
 		lastTime, 
 		deltaTime;
 
@@ -43,7 +44,7 @@ public class ModifierObjectEditor : Editor
 		vpsRefreshCounter += deltaTime;
 		if (Application.isPlaying)
 		{
-			if (vpsRefreshCounter > vpsRefreshDelay)
+			if (vpsRefreshCounter > VPS_REFRESH_DELAY)
 			{
 				delayedVPS = current.GetModifiedVertsPerSecond ();
 				vpsRefreshCounter = 0f;
@@ -53,7 +54,7 @@ public class ModifierObjectEditor : Editor
 
 			if (GUILayout.Button ("Save Mesh"))
 			{
-				Mesh tempMesh = (Mesh)Object.Instantiate (current.Mesh);
+				var tempMesh = (Mesh)Object.Instantiate (current.Mesh);
 				AssetDatabase.CreateAsset (tempMesh, AssetDatabase.GenerateUniqueAssetPath (DEFAULT_PATH + current.name + ".asset"));
 			}
 

@@ -5,25 +5,11 @@ using MeshModifiers;
 [AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "Pinch")]
 public class PinchModifier : MeshModifierBase
 {
-	#region Public Properties
-
 	public Vector3
 		negativeAxis = Vector3.one,
 		positiveAxis = Vector3.one;
 
-	#endregion
-
-
-
-	#region Private Properties
-
-	Vector3 sv, sv2;
-
-	#endregion
-
-
-
-	#region Inherited Methods
+	private Vector3 sv, sv2;
 
 	public override void PreMod ()
 	{
@@ -38,7 +24,7 @@ public class PinchModifier : MeshModifierBase
 
 	protected override Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal)
 	{
-		Vector3 v = basePosition;
+		var v = basePosition;
 
 		v.x = Mathf.Lerp (v.x, v.x * (positiveAxis.y), Mathf.Clamp01 ((v.y + sv.y) / sv2.y) * (1.0f - positiveAxis.y));
 		v.x = Mathf.Lerp (v.x, v.x * (negativeAxis.y), Mathf.Clamp01 ((-v.y + sv.y) / sv2.y) * (1.0f - negativeAxis.y));
@@ -57,6 +43,4 @@ public class PinchModifier : MeshModifierBase
 
 		return v;
 	}
-
-	#endregion
 }

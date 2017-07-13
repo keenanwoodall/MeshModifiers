@@ -5,8 +5,6 @@ using MeshModifiers;
 [RequireComponent (typeof (ModifierObject))]
 public class DistanceBasedModifyFrames : MonoBehaviour
 {
-	#region Public Properties
-
 	public Transform target;
 
 	public int
@@ -21,29 +19,23 @@ public class DistanceBasedModifyFrames : MonoBehaviour
 	[NonSerialized]
 	public ModifierObject modObject;
 
-	#endregion
-
-
-
-	#region Unity Methods
-
-	void Start ()
+	private void Start ()
 	{
 		if (modObject == null)
 			modObject = GetComponent<ModifierObject> ();
 	}
 
-	void Update ()
+	private void Update ()
 	{
 		if (target == null || modObject == null || !modObject.autoUpdate)
 			return;
 
-		float distance = Vector3.Distance (modObject.transform.position, target.position);
+		var distance = Vector3.Distance (modObject.transform.position, target.position);
 
 		modObject.modifyFrames = (int)Mathf.Lerp (minFrames, maxFrames, Mathf.InverseLerp (minFramesDistance, maxFramesDistance, distance));
 	}
 
-	void OnValidate ()
+	private void OnValidate ()
 	{
 		if (minFrames < 1)
 			minFrames = 1;
@@ -55,6 +47,4 @@ public class DistanceBasedModifyFrames : MonoBehaviour
 		if (maxFramesDistance < minFramesDistance)
 			maxFramesDistance = minFramesDistance;
 	}
-
-	#endregion
 }
