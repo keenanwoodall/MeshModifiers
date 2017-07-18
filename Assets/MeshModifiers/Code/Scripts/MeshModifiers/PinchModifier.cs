@@ -18,8 +18,8 @@ public class PinchModifier : MeshModifierBase
 		extents = modObject.GetBounds ().extents;
 		doubleExtents = extents * 2;
 
-		negativeAxis = Vectorx.Clamp (negativeAxis, Vector3.zero, Vector3.one);
-		positiveAxis = Vectorx.Clamp (positiveAxis, Vector3.zero, Vector3.one);
+		//negativeAxis = Vectorx.Clamp (negativeAxis, Vector3.zero, Vector3.one);
+		//positiveAxis = Vectorx.Clamp (positiveAxis, Vector3.zero, Vector3.one);
 	}
 
 	protected override Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal)

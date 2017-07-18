@@ -225,6 +225,8 @@ namespace MeshModifiers
 		/// </summary>
 		public void RefreshModifiers ()
 		{
+			if (modifiers == null)
+				modifiers = new List<MeshModifierBase> ();
 			modifiers = GetComponents<MeshModifierBase> ().ToList ();
 		}
 

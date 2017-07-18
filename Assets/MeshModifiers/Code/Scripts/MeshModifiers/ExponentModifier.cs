@@ -10,10 +10,6 @@ public class ExponentModifier : MeshModifierBase
 	public override void PreMod ()
 	{
 		base.PreMod ();
-
-		value.x = value.x < 0f ? 0f : value.x;
-		value.y = value.y < 0f ? 0f : value.y;
-		value.z = value.z < 0f ? 0f : value.x;
 	}
 
 	protected override Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal)
