@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Mathx;
 using MeshModifiers;
 
 [AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "Twist")]

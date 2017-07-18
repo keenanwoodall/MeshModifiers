@@ -1,27 +1,4 @@
-﻿	/*
-	* Copyright (c) 2016 Keenan Woodall
-	*
-	* This software is provided 'as-is', without any express or implied
-	* warranty. In no event will the authors be held liable for any damages
-	* arising from the use of this software.
-	*
-	* Permission is granted to anyone to use this software for any purpose,
-	* including commercial applications, and to alter it and redistribute it
-	* freely, subject to the following restrictions:
-	* 
-	*    1. The origin of this software must not be misrepresented; you must not
-	*    claim that you wrote the original software. If you use this software
-	*    in a product, an acknowledgment in the product documentation would be
-	*    appreciated but is not required.
-	* 
-	*    2. Altered source versions must be plainly marked as such, and must not be
-	*    misrepresented as being the original software.
-	* 
-	*    3. This notice may not be removed or altered from any source
-	*    distribution.
-	*/
-
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 using System.Linq;
 using System.Collections;
@@ -37,21 +14,17 @@ namespace MeshModifiers
 		[Range (0f, 1f)]
 		public float modifierStrength = 1f;
 
-
 		[Tooltip (MeshModifierConstants.NORMALS_QUALITY_TOOLTIP)]
-		public NormalsQuality normalQuality = NormalsQuality.LowQuality;
+		public NormalsQuality normalQuality = NormalsQuality.None;
 
 		[Range (0f, 180f), Tooltip (MeshModifierConstants.SMOOTHING_ANGLE_TOOLTIP)]
 		public float smoothingAngle = 60f;
-
 
 		[System.NonSerialized, Tooltip (MeshModifierConstants.UPDATE_WHEN_HIDDEN_TOOLTIP)]
 		public bool updateWhenHidden = false;
 
 		[Range (1, MeshModifierConstants.MAX_MOD_FRAMES), Tooltip (MeshModifierConstants.MODIFY_FRAMES_TOOLTIP)]
 		public int modifyFrames = 1;
-
-
 
 		[System.NonSerialized]
 		public List<MeshModifierBase> modifiers = new List<MeshModifierBase> ();
@@ -122,6 +95,10 @@ namespace MeshModifiers
 			RefreshModifiers ();
 
 			StartCoroutine (AutoApplyModifiers ());
+			UnityEditor.Undo.undoRedoPerformed += () =>
+			{
+				ModifyAll ();
+			};
 		}
 
 		private void OnWillRenderObject ()
@@ -265,7 +242,7 @@ namespace MeshModifiers
 		/// </summary>
 		public int GetVertCount ()
 		{
-			return (Filter.sharedMesh) ? Filter.sharedMesh.vertexCount : 0;
+			return (Filter && Filter.sharedMesh) ? Filter.sharedMesh.vertexCount : 0;
 		}
 
 		/// <summary>
@@ -358,7 +335,7 @@ namespace MeshModifiers
 		/// </summary>
 		private bool CanModify ()
 		{
-			return (IsVisible || updateWhenHidden) && autoUpdate && GetUseableModifiers ().Length > 0;
+			return (IsVisible || updateWhenHidden) && autoUpdate;
 		}
 
 		/// <summary>
@@ -390,7 +367,7 @@ namespace MeshModifiers
 
 
 		/// <summary>
-		/// Does ApplyModifiers over x frames to lessen performance impact.
+		/// Modifies multiple chunks over x frames to lessen performance impact.
 		/// </summary>
 		private IEnumerator AutoApplyModifiers ()
 		{
@@ -400,32 +377,32 @@ namespace MeshModifiers
 				{
 					OnAutoUpdateStart.Invoke ();
 
-					// The current chunk index starts at zero.
 					CurrentModifiedChunkIndex = 0;
 
-					// Store the number of splits in a local variable so that if modifyFrames is changed before the modifications are complete, nothing will get messed up.
-					var chunks = modifyFrames;
+					// Store the number of chunks in a local variable so that if modifyFrames is changed before the modifications are complete, nothing will get messed up.
+					var chunkCount = modifyFrames;
 					// Find the approximate number of vertices in a single split.
-					var chunkSize = Mesh.vertexCount / chunks;
+					var chunkSize = Mesh.vertexCount / chunkCount;
 
 					// Increment time based on how much approximate time will have passed when the mods are done.
-					Time += UnityEngine.Time.deltaTime * chunks;
+					Time += UnityEngine.Time.deltaTime * chunkCount;
 
 					InvokePreMods (GetUseableModifiers ());
 
 					// Loop through every chunk.
-					for (var currentChunkIndex = 0; currentChunkIndex < chunks; currentChunkIndex++)
+					for (var currentChunkIndex = 0; currentChunkIndex < chunkCount; currentChunkIndex++)
 					{
 						if (refreshModifiersEveryFrame)
 							RefreshModifiers ();
 
-						ModifyChunk (chunkSize * currentChunkIndex, chunkSize * (currentChunkIndex + 1) + ((currentChunkIndex + 1 == chunks) ? CalcVertRemainder (GetVertCount (), chunkSize, chunks) : 0), GetUseableModifiers ());
+						ModifyChunk (chunkSize * currentChunkIndex, chunkSize * (currentChunkIndex + 1) + ((currentChunkIndex + 1 == chunkCount) ? CalcVertRemainder (GetVertCount (), chunkSize, chunkCount) : 0), GetUseableModifiers ());
 
 						// The current chunk's modifications are finished so the next chunk will start being processed.
 						CurrentModifiedChunkIndex++;
 
-						// Wait a frame.
-						yield return null;
+						// If there's more than one chunk, wait a frame.
+						if (chunkCount > 1)
+							yield return null;
 					}
 
 					// Update the mesh to reflect the new modifications.
@@ -435,8 +412,7 @@ namespace MeshModifiers
 
 					OnAutoUpdateFinish.Invoke ();
 				}
-				else
-					yield return null;
+				yield return null;
 			}
 		}
 		
