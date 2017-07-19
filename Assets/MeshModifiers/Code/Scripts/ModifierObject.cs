@@ -227,7 +227,14 @@ namespace MeshModifiers
 		{
 			if (modifiers == null)
 				modifiers = new List<MeshModifierBase> ();
-			modifiers = GetComponents<MeshModifierBase> ().ToList ();
+			try
+			{
+				modifiers = GetComponents<MeshModifierBase> ().ToList ();
+			}
+			catch
+			{
+				// I don't know why calling GetComponents says that ModifierObject is null!
+			}
 		}
 
 		/// <summary>

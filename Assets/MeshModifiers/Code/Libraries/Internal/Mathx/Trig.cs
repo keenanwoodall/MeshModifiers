@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
-using Mathx;
 
 namespace Mathx.Trig
 {
@@ -26,33 +24,19 @@ namespace Mathx.Trig
 	[Serializable]
 	public abstract class TrigObject
 	{
-		#region Public Properties
-
 		public float
 			amplitude = 0.1f,
 			frequency = 0.5f;
-
-		#endregion
-
-
-
-		#region Private Properties
 
 		private float
 			phase,
 			oldFrequency;
 
-		#endregion
-
-
-
-		#region Constructors
 
 		public TrigObject ()
 		{
 			oldFrequency = frequency;
 		}
-
 		public TrigObject (float amplitude, float frequency)
 		{
 			this.amplitude = amplitude;
@@ -60,11 +44,6 @@ namespace Mathx.Trig
 			oldFrequency = frequency;
 		}
 
-		#endregion
-
-
-
-		#region Main Methods
 
 		public float Solve (float t, float offset = 0f)
 		{
@@ -74,23 +53,15 @@ namespace Mathx.Trig
 			return TrigFunction (t * oldFrequency + phase + offset) * amplitude;
 		}
 
-		#endregion
-
-
-
-		#region Utility Methods
-
 		protected abstract float TrigFunction (float t);
 
-		void CalculateNewFrequency (float t)
+		private void CalculateNewFrequency (float t)
 		{
 			float current = (t * oldFrequency + phase) % (2f * Mathf.PI);
 			float next = (t * frequency) % (2f * Mathf.PI);
 			phase = current - next;
 			oldFrequency = frequency;
 		}
-
-		#endregion
 	}
 
 	[Serializable]

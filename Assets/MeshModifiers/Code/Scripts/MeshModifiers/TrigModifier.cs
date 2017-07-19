@@ -44,6 +44,6 @@ public class TrigModifier : MeshModifierBase
 	private Vector3 Trig3 (Vector3 t)
 	{
 		var offset = speed * modObject.Time;
-		return new Vector3 (xAxis.Solve (t.z, offset.x), yAxis.Solve (t.x, offset.y), zAxis.Solve (t.y, offset.z));
+		return new Vector3 ((xAxis.amplitude == 0) ? 0f : xAxis.Solve (t.z, offset.x), (yAxis.amplitude == 0) ? 0f : yAxis.Solve (t.x, offset.y), (zAxis.amplitude == 0) ? 0f : zAxis.Solve (t.y, offset.z));
 	}
 }
