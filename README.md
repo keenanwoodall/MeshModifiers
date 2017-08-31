@@ -7,7 +7,9 @@ An easy-to-use mesh-modifying system that functions similarly to 3D modeling pro
 
 - You can save modified meshes to your project
 
-- Can split calculations over multiple frames/updates in user-defined or auto-calculated chunks for increased performance
+- Calculations can be split over multiple frames/updates in user-defined or auto-calculated chunks for increased performance
+
+- Use your favorite vertex painter to paint how much a vertex can be affected by modifiers.
 
 - Very easy to extend
 
