@@ -13,7 +13,7 @@ namespace MeshModifiers
 
 		[Range (0f, 1f)]
 		public float modifierStrength = 1f;
-		public enum ModifierStrengthVertexMask { None, R, G, B }
+		public enum ModifierStrengthVertexMask { None, R, G, B, A }
 		[Tooltip (MeshModifierConstants.MODIFIER_STRENGTH_VERTEX_MASK_TOOLTIP)]
 		public ModifierStrengthVertexMask modifierStrengthVertexMask = ModifierStrengthVertexMask.None;
 
@@ -390,6 +390,9 @@ namespace MeshModifiers
 					break;
 				case ModifierStrengthVertexMask.B:
 					modifiedVertices[currentVertex] = Vector3.Lerp (baseVertices[currentVertex], modifiedVertices[currentVertex], colors[currentVertex].b);
+					break;
+				case ModifierStrengthVertexMask.A:
+					modifiedVertices[currentVertex] = Vector3.Lerp (baseVertices[currentVertex], modifiedVertices[currentVertex], colors[currentVertex].a);
 					break;
 			}
 		}
