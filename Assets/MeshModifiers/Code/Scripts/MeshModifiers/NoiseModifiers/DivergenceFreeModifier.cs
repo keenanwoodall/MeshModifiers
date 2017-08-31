@@ -9,11 +9,11 @@ public class DivergenceFreeModifier : NoiseModifierBase
 {
 	public DFNoise3D noiseModule;
 
-	protected override Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal)
+	protected override Vector3 _ModifyOffset (VertexData vertexData)
 	{
-		var sampleCoordinates = GetSampleCoordinate (basePosition);
+		var sampleCoordinates = GetSampleCoordinate (vertexData.position);
 		var value = ((spherical) ? noiseModule.GetDFNoise (sampleCoordinates) : noiseModule.GetGradient (sampleCoordinates));
 		
-		return FormatValue (value, basePosition);
+		return FormatValue (value, vertexData.position);
 	}
 }

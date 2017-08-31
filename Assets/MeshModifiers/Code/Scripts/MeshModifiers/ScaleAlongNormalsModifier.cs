@@ -8,8 +8,8 @@ public class ScaleAlongNormalsModifier : MeshModifierBase
 {
 	public float amount = 0f;
 
-	protected override Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal)
+	protected override Vector3 _ModifyOffset (VertexData vertexData)
 	{
-		return basePosition + baseNormal * amount;
+		return vertexData.position + vertexData.normal * amount;
 	}
 }

@@ -2,6 +2,17 @@
 
 namespace MeshModifiers
 {
+	public struct VertexData
+	{
+		public Vector3 position;
+		public Vector3 normal;
+
+		public VertexData (Vector3 position, Vector3 normal)
+		{
+			this.position = position;
+			this.normal = normal;
+		}
+	}
 	[RequireComponent (typeof (ModifierObject))]
 	public abstract class MeshModifierBase : MonoBehaviour
 	{
@@ -27,11 +38,11 @@ namespace MeshModifiers
 		/// </summary>
 		public virtual void PostMod () { }
 
-		public Vector3 ModifyOffset (Vector3 position, Vector3 normal)
+		public Vector3 ModifyOffset (VertexData vertexData)
 		{
-			return update ? _ModifyOffset (position, normal) : position;
+			return update ? _ModifyOffset (vertexData) : vertexData.position;
 		}
 
-		protected abstract Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal);
+		protected abstract Vector3 _ModifyOffset (VertexData vertexData);
 	}
 }

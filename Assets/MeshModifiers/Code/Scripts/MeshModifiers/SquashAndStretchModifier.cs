@@ -49,12 +49,12 @@ public class SquashAndStretchModifier : MeshModifierBase
 		meshSpace = scaleSpace.inverse;
 	}
 
-	protected override Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal)
+	protected override Vector3 _ModifyOffset (VertexData vertexData)
 	{
 		if (Mathf.Approximately (amount, 0f))
-			return basePosition;
+			return vertexData.position;
 
-		var basePositionOnAxis = scaleSpace.MultiplyPoint3x4 (basePosition);
+		var basePositionOnAxis = scaleSpace.MultiplyPoint3x4 (vertexData.position);
 		var amountPlus1 = amount + 1f;
 
 		basePositionOnAxis.x *= amountPlus1;

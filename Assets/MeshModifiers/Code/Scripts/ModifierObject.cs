@@ -13,6 +13,9 @@ namespace MeshModifiers
 
 		[Range (0f, 1f)]
 		public float modifierStrength = 1f;
+		public enum ModifierStrengthVertexMask { None, R, G, B }
+		[Tooltip (MeshModifierConstants.MODIFIER_STRENGTH_VERTEX_MASK_TOOLTIP)]
+		public ModifierStrengthVertexMask modifierStrengthVertexMask = ModifierStrengthVertexMask.None;
 
 		[Tooltip (MeshModifierConstants.NORMALS_QUALITY_TOOLTIP)]
 		public NormalsQuality normalQuality = NormalsQuality.None;
@@ -48,6 +51,7 @@ namespace MeshModifiers
 		private Vector3[] modifiedVertices;
 		private Vector3[] baseNormals;
 		private Vector3[] modifiedNormals;
+		private Color[] colors;
 
 		/// <summary>
 		/// Updated based on Unity's OnWillRenderObject and OnBecameVisible.
@@ -60,7 +64,7 @@ namespace MeshModifiers
 		public int CurrentModifiedChunkIndex { get; private set; }
 
 		/// <summary>
-		/// Local to the modifier object. Used to sync modifications that occur over multiple frames and require a time value.
+		/// Local to the modifier object. Used to sync modifications that occur over multiple frames that require a time value (like an animated sin-wave or noise).
 		/// </summary>
 		public float Time { get; private set; }
 
@@ -88,7 +92,6 @@ namespace MeshModifiers
 		{
 			Filter = GetComponent<MeshFilter> ();
 		}
-
 		private void Start ()
 		{
 			ChangeMesh (Filter.sharedMesh);
@@ -100,12 +103,10 @@ namespace MeshModifiers
 				ModifyAll ();
 			};
 		}
-
 		private void OnWillRenderObject ()
 		{
 			IsVisible = true;
 		}
-
 		private void OnBecameInvisible ()
 		{
 			IsVisible = false;
@@ -160,10 +161,14 @@ namespace MeshModifiers
 			{
 				// For each modifier...
 				foreach (int index in modifierIndexes)
-					modifiedVertices[currentVert] = modifiers[index].ModifyOffset (modifiedVertices[currentVert], modifiedNormals[currentVert]);
+					modifiedVertices[currentVert] = modifiers[index].ModifyOffset (ConstructData (currentVert));
 
 				PostModPointOperation (currentVert);
 			}
+		}
+		private VertexData ConstructData (int index)
+		{
+			return new VertexData (modifiedVertices[index], modifiedNormals[index]);
 		}
 
 		/// <summary>
@@ -194,6 +199,7 @@ namespace MeshModifiers
 
 			baseVertices = (Vector3[])Filter.sharedMesh.vertices.Clone ();
 			baseNormals = (Vector3[])Filter.sharedMesh.normals.Clone ();
+			colors = (Color[])Filter.sharedMesh.colors.Clone ();
 			ResetVerticesAndNormals ();
 		}
 
@@ -338,7 +344,6 @@ namespace MeshModifiers
 			return new Bounds (Filter.mesh.bounds.center, Filter.mesh.bounds.size);
 		}
 
-
 		/// <summary>
 		/// Should this object perform modifications to the mesh?
 		/// </summary>
@@ -372,6 +377,21 @@ namespace MeshModifiers
 		{
 			if (!Mathf.Approximately (modifierStrength, 1f))
 				modifiedVertices[currentVertex] = Vector3.Lerp (baseVertices[currentVertex], modifiedVertices[currentVertex], modifierStrength);
+
+			switch (modifierStrengthVertexMask)
+			{
+				case ModifierStrengthVertexMask.None:
+					break;
+				case ModifierStrengthVertexMask.R:
+					modifiedVertices[currentVertex] = Vector3.Lerp (baseVertices[currentVertex], modifiedVertices[currentVertex], colors[currentVertex].r);
+					break;
+				case ModifierStrengthVertexMask.G:
+					modifiedVertices[currentVertex] = Vector3.Lerp (baseVertices[currentVertex], modifiedVertices[currentVertex], colors[currentVertex].g);
+					break;
+				case ModifierStrengthVertexMask.B:
+					modifiedVertices[currentVertex] = Vector3.Lerp (baseVertices[currentVertex], modifiedVertices[currentVertex], colors[currentVertex].b);
+					break;
+			}
 		}
 
 

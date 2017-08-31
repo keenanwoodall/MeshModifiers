@@ -18,43 +18,43 @@ public class TwistModifier : MeshModifierBase
 		bounds = modObject.GetBounds ();
 	}
 
-	protected override Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal)
+	protected override Vector3 _ModifyOffset (VertexData vertexData)
 	{
-		var v = basePosition;
+		var position = vertexData.position;
 		float angle, cos, sin;
 
 		if (twist.x != 0.0f)
 		{
-			angle = v.x * twist.x;
-			angle *= xStrength.Evaluate(Mathf.InverseLerp (-bounds.extents.x, bounds.extents.x, v.x));
+			angle = position.x * twist.x;
+			angle *= xStrength.Evaluate(Mathf.InverseLerp (-bounds.extents.x, bounds.extents.x, position.x));
 			cos = Mathf.Cos (angle);
 			sin = Mathf.Sin (angle);
 
-			v.z = v.z * cos - v.y * sin;
-			v.y = v.y * cos + v.z * sin;
+			position.z = position.z * cos - position.y * sin;
+			position.y = position.y * cos + position.z * sin;
 		}
 
 		if (twist.y != 0.0f)
 		{
-			angle = v.y * twist.y;
-			angle *= yStrength.Evaluate (Mathf.InverseLerp (-bounds.extents.y, bounds.extents.y, v.y));
+			angle = position.y * twist.y;
+			angle *= yStrength.Evaluate (Mathf.InverseLerp (-bounds.extents.y, bounds.extents.y, position.y));
 			cos = Mathf.Cos (angle);
 			sin = Mathf.Sin (angle);
 
-			v.x = v.x * cos - v.z * sin;
-			v.z = v.z * cos + v.x * sin;
+			position.x = position.x * cos - position.z * sin;
+			position.z = position.z * cos + position.x * sin;
 		}
 
 		if (twist.z != 0.0f)
 		{
-			angle = v.z * twist.z;
-			angle *= zStrength.Evaluate (Mathf.InverseLerp (-bounds.extents.z, bounds.extents.z, v.z));
+			angle = position.z * twist.z;
+			angle *= zStrength.Evaluate (Mathf.InverseLerp (-bounds.extents.z, bounds.extents.z, position.z));
 			cos = Mathf.Cos (angle);
 			sin = Mathf.Sin (angle);
 
-			v.x = v.x * cos - v.y * sin;
-			v.y = v.y * cos + v.x * sin;
+			position.x = position.x * cos - position.y * sin;
+			position.y = position.y * cos + position.x * sin;
 		}
-		return v;
+		return position;
 	}
 }

@@ -8,13 +8,13 @@ public class VoronoiModifier : NoiseModifierBase
 	[SerializeField]
 	private Voronoi noiseModule = new Voronoi ();
 
-	protected override Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal)
+	protected override Vector3 _ModifyOffset (VertexData vertexData)
 	{
 		if (!noiseModule.IsDisposed)
 			noiseModule.Dispose ();
 
-		var value = 0.5f + (float)noiseModule.GetValue (GetSampleCoordinate (basePosition));
+		var value = 0.5f + (float)noiseModule.GetValue (GetSampleCoordinate (vertexData.position));
 
-		return FormatValue (value, basePosition);
+		return FormatValue (value, vertexData.position);
 	}
 }

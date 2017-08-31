@@ -18,21 +18,22 @@ public class TrigModifier : MeshModifierBase
 		useWorldPos = false,
 		radial = false;
 
-	protected override Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal)
+	protected override Vector3 _ModifyOffset (VertexData vertexData)
 	{
+		var position = vertexData.position;
 		if (radial)
 		{
 			if (useWorldPos)
-				return basePosition * (0.5f + TrigOffset (transform.position + Vector3.one * Vector3.Distance (transform.position, basePosition + transform.position + offset)).magnitude);
+				return position * (0.5f + TrigOffset (transform.position + Vector3.one * Vector3.Distance (transform.position, position + transform.position + offset)).magnitude);
 			else
-				return basePosition * (0.5f + TrigOffset (Vector3.one * Vector3.Distance (transform.position, basePosition + transform.position + offset)).magnitude);
+				return position * (0.5f + TrigOffset (Vector3.one * Vector3.Distance (transform.position, position + transform.position + offset)).magnitude);
 		}
 		else
 		{
 			if (useWorldPos)
-				return basePosition + TrigOffset (basePosition + transform.position + offset);
+				return position + TrigOffset (position + transform.position + offset);
 			else
-				return basePosition + TrigOffset (basePosition + offset);
+				return position + TrigOffset (position + offset);
 		}
 	}
 

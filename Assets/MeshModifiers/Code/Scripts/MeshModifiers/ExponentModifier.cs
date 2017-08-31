@@ -12,21 +12,21 @@ public class ExponentModifier : MeshModifierBase
 		base.PreMod ();
 	}
 
-	protected override Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal)
+	protected override Vector3 _ModifyOffset (VertexData vertexData)
 	{
 		if (absolute)
 		{
-			basePosition.x *= Mathf.Exp (Mathf.Abs (basePosition.x * value.x));
-			basePosition.y *= Mathf.Exp (Mathf.Abs (basePosition.y * value.y));
-			basePosition.z *= Mathf.Exp (Mathf.Abs (basePosition.z * value.z));
+			vertexData.position.x *= Mathf.Exp (Mathf.Abs (vertexData.position.x * value.x));
+			vertexData.position.y *= Mathf.Exp (Mathf.Abs (vertexData.position.y * value.y));
+			vertexData.position.z *= Mathf.Exp (Mathf.Abs (vertexData.position.z * value.z));
 		}
 		else
 		{
-			basePosition.x *= Mathf.Exp (basePosition.x * value.x);
-			basePosition.y *= Mathf.Exp (basePosition.y * value.y);
-			basePosition.z *= Mathf.Exp (basePosition.z * value.z);
+			vertexData.position.x *= Mathf.Exp (vertexData.position.x * value.x);
+			vertexData.position.y *= Mathf.Exp (vertexData.position.y * value.y);
+			vertexData.position.z *= Mathf.Exp (vertexData.position.z * value.z);
 		}
 
-		return basePosition;
+		return vertexData.position;
 	}
 }

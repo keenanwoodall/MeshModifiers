@@ -7,7 +7,7 @@ using MeshModifiers;
 //[AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "-Your Modifier Name Here-")]
 public class CustomModifierTemplate : MeshModifierBase
 {
-	protected override Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal)
+	protected override Vector3 _ModifyOffset (VertexData vertexData)
 	{
 		/* READ ME OR REMOVE ME
 		
@@ -28,6 +28,6 @@ public class CustomModifierTemplate : MeshModifierBase
 		*/
 
 		// Return an unmodified vertice.
-		return basePosition;
+		return vertexData.position;
 	}
 }

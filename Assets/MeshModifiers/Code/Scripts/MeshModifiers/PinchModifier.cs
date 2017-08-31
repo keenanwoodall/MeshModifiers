@@ -22,25 +22,25 @@ public class PinchModifier : MeshModifierBase
 		//positiveAxis = Vectorx.Clamp (positiveAxis, Vector3.zero, Vector3.one);
 	}
 
-	protected override Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal)
+	protected override Vector3 _ModifyOffset (VertexData vertexData)
 	{
-		var v = basePosition;
+		var position = vertexData.position;
 
-		v.x = Mathf.Lerp (v.x, v.x * (positiveAxis.y), Mathf.Clamp01 ((v.y + extents.y) / doubleExtents.y) * (1.0f - positiveAxis.y));
-		v.x = Mathf.Lerp (v.x, v.x * (negativeAxis.y), Mathf.Clamp01 ((-v.y + extents.y) / doubleExtents.y) * (1.0f - negativeAxis.y));
-		v.x = Mathf.Lerp (v.x, v.x * (positiveAxis.z), Mathf.Clamp01 ((v.z + extents.z) / doubleExtents.z) * (1.0f - positiveAxis.z));
-		v.x = Mathf.Lerp (v.x, v.x * (negativeAxis.z), Mathf.Clamp01 ((-v.z + extents.z) / doubleExtents.z) * (1.0f - negativeAxis.z));
+		position.x = Mathf.Lerp (position.x, position.x * (positiveAxis.y), Mathf.Clamp01 ((position.y + extents.y) / doubleExtents.y) * (1.0f - positiveAxis.y));
+		position.x = Mathf.Lerp (position.x, position.x * (negativeAxis.y), Mathf.Clamp01 ((-position.y + extents.y) / doubleExtents.y) * (1.0f - negativeAxis.y));
+		position.x = Mathf.Lerp (position.x, position.x * (positiveAxis.z), Mathf.Clamp01 ((position.z + extents.z) / doubleExtents.z) * (1.0f - positiveAxis.z));
+		position.x = Mathf.Lerp (position.x, position.x * (negativeAxis.z), Mathf.Clamp01 ((-position.z + extents.z) / doubleExtents.z) * (1.0f - negativeAxis.z));
 
-		v.y = Mathf.Lerp (v.y, v.y * (positiveAxis.x), Mathf.Clamp01 ((v.x + extents.x) / doubleExtents.x) * (1.0f - positiveAxis.x));
-		v.y = Mathf.Lerp (v.y, v.y * (negativeAxis.x), Mathf.Clamp01 ((-v.x + extents.x) / doubleExtents.x) * (1.0f - negativeAxis.x));
-		v.y = Mathf.Lerp (v.y, v.y * (positiveAxis.z), Mathf.Clamp01 ((v.z + extents.z) / doubleExtents.z) * (1.0f - positiveAxis.z));
-		v.y = Mathf.Lerp (v.y, v.y * (negativeAxis.z), Mathf.Clamp01 ((-v.z + extents.z) / doubleExtents.z) * (1.0f - negativeAxis.z));
+		position.y = Mathf.Lerp (position.y, position.y * (positiveAxis.x), Mathf.Clamp01 ((position.x + extents.x) / doubleExtents.x) * (1.0f - positiveAxis.x));
+		position.y = Mathf.Lerp (position.y, position.y * (negativeAxis.x), Mathf.Clamp01 ((-position.x + extents.x) / doubleExtents.x) * (1.0f - negativeAxis.x));
+		position.y = Mathf.Lerp (position.y, position.y * (positiveAxis.z), Mathf.Clamp01 ((position.z + extents.z) / doubleExtents.z) * (1.0f - positiveAxis.z));
+		position.y = Mathf.Lerp (position.y, position.y * (negativeAxis.z), Mathf.Clamp01 ((-position.z + extents.z) / doubleExtents.z) * (1.0f - negativeAxis.z));
 
-		v.z = Mathf.Lerp (v.z, v.z * (positiveAxis.x), Mathf.Clamp01 ((v.x + extents.x) / doubleExtents.x) * (1.0f - positiveAxis.x));
-		v.z = Mathf.Lerp (v.z, v.z * (negativeAxis.x), Mathf.Clamp01 ((-v.x + extents.x) / doubleExtents.x) * (1.0f - negativeAxis.x));
-		v.z = Mathf.Lerp (v.z, v.z * (positiveAxis.y), Mathf.Clamp01 ((v.y + extents.y) / doubleExtents.y) * (1.0f - positiveAxis.y));
-		v.z = Mathf.Lerp (v.z, v.z * (negativeAxis.y), Mathf.Clamp01 ((-v.y + extents.y) / doubleExtents.y) * (1.0f - negativeAxis.y));
+		position.z = Mathf.Lerp (position.z, position.z * (positiveAxis.x), Mathf.Clamp01 ((position.x + extents.x) / doubleExtents.x) * (1.0f - positiveAxis.x));
+		position.z = Mathf.Lerp (position.z, position.z * (negativeAxis.x), Mathf.Clamp01 ((-position.x + extents.x) / doubleExtents.x) * (1.0f - negativeAxis.x));
+		position.z = Mathf.Lerp (position.z, position.z * (positiveAxis.y), Mathf.Clamp01 ((position.y + extents.y) / doubleExtents.y) * (1.0f - positiveAxis.y));
+		position.z = Mathf.Lerp (position.z, position.z * (negativeAxis.y), Mathf.Clamp01 ((-position.y + extents.y) / doubleExtents.y) * (1.0f - negativeAxis.y));
 
-		return v;
+		return position;
 	}
 }

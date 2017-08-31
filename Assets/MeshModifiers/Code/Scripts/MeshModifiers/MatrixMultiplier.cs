@@ -6,9 +6,9 @@ public class MatrixMultiplier : MeshModifierBase
 {
 	public Matrix4x4 matrix = Matrix4x4.identity;
 
-	protected override Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal)
+	protected override Vector3 _ModifyOffset (VertexData vertexData)
 	{
-		basePosition = matrix.MultiplyPoint3x4 (basePosition);
-		return basePosition;
+		vertexData.position = matrix.MultiplyPoint3x4 (vertexData.position);
+		return vertexData.position;
 	}
 }

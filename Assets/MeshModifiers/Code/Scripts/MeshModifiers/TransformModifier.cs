@@ -19,8 +19,8 @@ public class TransformModifier : MeshModifierBase
 		transformSpace *= Matrix4x4.TRS (position, Quaternion.Euler (rotation), scale);
 	}
 
-	protected override Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal)
+	protected override Vector3 _ModifyOffset (VertexData vertexData)
 	{
-		return transformSpace.MultiplyPoint3x4 (basePosition);
+		return transformSpace.MultiplyPoint3x4 (vertexData.position);
 	}
 }

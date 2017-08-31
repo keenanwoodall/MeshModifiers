@@ -12,9 +12,9 @@ public class RoundModifier : MeshModifierBase
 			nearestAmount = 0.0001f;
 	}
 	
-	protected override Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal)
+	protected override Vector3 _ModifyOffset (VertexData vertexData)
 	{
-		basePosition /= nearestAmount;
-		return new Vector3 (Mathf.Round (basePosition.x), Mathf.Round (basePosition.y), Mathf.Round (basePosition.z)) * nearestAmount;
+		var position = vertexData.position /= nearestAmount;
+		return new Vector3 (Mathf.Round (position.x), Mathf.Round (position.y), Mathf.Round (position.z)) * nearestAmount;
 	}
 }

@@ -21,13 +21,14 @@ public class CurveScaleModifier : MeshModifierBase
 
 		meshBounds = modObject.GetBounds ();
 	}
-	protected override Vector3 _ModifyOffset (Vector3 basePosition, Vector3 baseNormal)
+	protected override Vector3 _ModifyOffset (VertexData vertexData)
 	{
+		var position = vertexData.position;
 		float
-			z = xAxis.Evaluate (Mathf.InverseLerp (meshBounds.min.x, meshBounds.max.x, basePosition.x)),
-			x = yAxis.Evaluate (Mathf.InverseLerp (meshBounds.min.y, meshBounds.max.y, basePosition.y)),
-			y = zAxis.Evaluate (Mathf.InverseLerp (meshBounds.min.z, meshBounds.max.z, basePosition.z));
+			z = xAxis.Evaluate (Mathf.InverseLerp (meshBounds.min.x, meshBounds.max.x, position.x)),
+			x = yAxis.Evaluate (Mathf.InverseLerp (meshBounds.min.y, meshBounds.max.y, position.y)),
+			y = zAxis.Evaluate (Mathf.InverseLerp (meshBounds.min.z, meshBounds.max.z, position.z));
 
-		return Mathx.Vectorx.Multiply (basePosition, new Vector3 (x, y, z));
+		return Mathx.Vectorx.Multiply (position, new Vector3 (x, y, z));
 	}
 }
