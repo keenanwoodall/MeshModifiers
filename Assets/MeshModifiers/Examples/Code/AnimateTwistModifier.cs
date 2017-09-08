@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent (typeof (TwistModifier))]
 public class AnimateTwistModifier : MonoBehaviour
@@ -13,8 +11,8 @@ public class AnimateTwistModifier : MonoBehaviour
 	}
 	private void Update ()
 	{
-		var newTwist = tm.twist;
-		newTwist.y = Mathf.Lerp (-10f, 10f, (Mathf.Sin (Time.time * 2f) + 1f) / 2f);
-		tm.twist = newTwist;
+		var newTwist = tm.twistAmount;
+		newTwist = Mathf.Lerp (-10f, 10f, (Mathf.Sin (Time.time * 2f) + 1f) / 2f);
+		tm.twistAmount = newTwist;
 	}
 }
