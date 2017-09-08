@@ -15,6 +15,6 @@ public class VoronoiModifier : NoiseModifierBase
 
 		var value = 0.5f + (float)noiseModule.GetValue (GetSampleCoordinate (vertexData.position));
 
-		return FormatValue (value, vertexData.position);
+		return FormatValue (value, vertexData);
 	}
 }

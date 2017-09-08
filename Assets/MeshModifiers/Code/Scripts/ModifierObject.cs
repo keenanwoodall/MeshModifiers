@@ -17,11 +17,7 @@ namespace MeshModifiers
 		[Tooltip (MeshModifierConstants.MODIFIER_STRENGTH_VERTEX_MASK_TOOLTIP)]
 		public ModifierStrengthVertexMask modifierStrengthVertexMask = ModifierStrengthVertexMask.None;
 
-		[Tooltip (MeshModifierConstants.NORMALS_QUALITY_TOOLTIP)]
-		public NormalsQuality normalQuality = NormalsQuality.None;
-
-		[Range (0f, 180f), Tooltip (MeshModifierConstants.SMOOTHING_ANGLE_TOOLTIP)]
-		public float smoothingAngle = 60f;
+		public bool updateNormals = true;
 
 		[System.NonSerialized, Tooltip (MeshModifierConstants.UPDATE_WHEN_HIDDEN_TOOLTIP)]
 		public bool updateWhenHidden = false;
@@ -51,6 +47,7 @@ namespace MeshModifiers
 		private Vector3[] modifiedVertices;
 		private Vector3[] baseNormals;
 		private Vector3[] modifiedNormals;
+		private Vector4[] baseTangents;
 		private Color[] colors;
 
 		/// <summary>
@@ -179,9 +176,7 @@ namespace MeshModifiers
 			// Update the mesh's vertices to reflect the modified vertices.
 			Mesh.SetVertices (modifiedVertices.ToList ());
 
-			// Update the normals.
-			RefreshSurface (normalQuality);
-
+			Mesh.RecalculateNormals ();
 			Mesh.RecalculateBounds ();
 
 			// Reset the modded vertices to their base state so next frames modifications are based on the original vertices.
@@ -199,31 +194,9 @@ namespace MeshModifiers
 
 			baseVertices = (Vector3[])Filter.sharedMesh.vertices.Clone ();
 			baseNormals = (Vector3[])Filter.sharedMesh.normals.Clone ();
+			baseTangents = (Vector4[])Filter.sharedMesh.tangents.Clone ();
 			colors = (Color[])Filter.sharedMesh.colors.Clone ();
 			ResetVerticesAndNormals ();
-		}
-
-		/// <summary>
-		/// Recalculates normals.
-		/// </summary>
-		public void RefreshSurface (NormalsQuality normalsQuality)
-		{
-			if (normalsQuality == NormalsQuality.None)
-				return;
-
-			switch (normalsQuality)
-			{
-				case NormalsQuality.LowQuality:
-					Mesh.RecalculateNormals ();
-					break;
-				case NormalsQuality.HighQuality:
-					Mesh.RecalculateNormals (smoothingAngle);
-					break;
-				case NormalsQuality.HighQualityOnce:
-					Mesh.RecalculateNormals (smoothingAngle);
-					normalQuality = NormalsQuality.None;
-					break;
-			}
 		}
 
 		/// <summary>
@@ -377,7 +350,8 @@ namespace MeshModifiers
 		{
 			if (!Mathf.Approximately (modifierStrength, 1f))
 				modifiedVertices[currentVertex] = Vector3.Lerp (baseVertices[currentVertex], modifiedVertices[currentVertex], modifierStrength);
-
+			if (colors.Length != modifiedVertices.Length)
+				return;
 			switch (modifierStrengthVertexMask)
 			{
 				case ModifierStrengthVertexMask.None:
@@ -417,7 +391,7 @@ namespace MeshModifiers
 					var chunkSize = Mesh.vertexCount / chunkCount;
 
 					// Increment time based on how much approximate time will have passed when the mods are done.
-					Time += UnityEngine.Time.deltaTime * chunkCount;
+					Time += UnityEngine.Time.smoothDeltaTime * chunkCount;
 
 					InvokePreMods (GetUseableModifiers ());
 

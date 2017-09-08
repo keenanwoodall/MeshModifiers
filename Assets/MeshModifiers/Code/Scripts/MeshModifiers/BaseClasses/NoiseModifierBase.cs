@@ -8,8 +8,9 @@ namespace MeshModifiers
 	public abstract class NoiseModifierBase : MeshModifierBase
 	{
 		public bool
-			useWorldPosition = false,
-			spherical = true;
+			useWorldPosition = false;
+		public enum NoiseDirection { Local, Normal, Spherical }
+		public NoiseDirection noiseDirection = NoiseDirection.Spherical;
 
 		public Vector3 offset = Vector3.zero;
 		public Vector3 speed = Vector3.zero;
@@ -35,12 +36,17 @@ namespace MeshModifiers
 			return coordinate;
 		}
 
-		protected Vector3 FormatValue (float value, Vector3 basePosition)
+		protected Vector3 FormatValue (float value, VertexData vertexData)
 		{
-			if (spherical)
-				return Vectorx.Multiply (basePosition, Vector3.one + (value * Magnitude));
-			else
-				return basePosition + (value * Magnitude) - Magnitude;
+			switch (noiseDirection)
+			{
+				case NoiseDirection.Local:
+					return vertexData.position + (value * Magnitude) - Magnitude;
+				case NoiseDirection.Normal:
+					return vertexData.position + (Vector3.Scale (vertexData.normal, (value * Magnitude)));
+				default:
+					return Vectorx.Multiply (vertexData.position, Vector3.one + (value * Magnitude));
+			}
 		}
 
 		protected Vector3 FormatValue (Vector3 value, Vector3 basePosition)

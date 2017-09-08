@@ -18,7 +18,7 @@ namespace LibNoise.Generator
 		[SerializeField]
 		private QualityMode _quality = QualityMode.Medium;
 		[SerializeField]
-		private int _octaveCount = 6;
+		private int _octaveCount = 2;
 		[SerializeField]
 		private double _persistence = 0.5;
 		[SerializeField]

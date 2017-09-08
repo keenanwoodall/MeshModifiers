@@ -67,10 +67,10 @@ public class ModifierObjectEditor : Editor
 				}
 			}
 
-			if (current.normalQuality == NormalsQuality.None)
+			if (!current.updateNormals)
 			{
 				if (GUILayout.Button ("Recalculate Normals"))
-					current.RefreshSurface (NormalsQuality.HighQuality);
+					current.Mesh.RecalculateNormals ();
 			}
 		}
 	}
