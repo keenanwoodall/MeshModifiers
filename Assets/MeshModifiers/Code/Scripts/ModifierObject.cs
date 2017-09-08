@@ -165,7 +165,7 @@ namespace MeshModifiers
 		}
 		private VertexData ConstructData (int index)
 		{
-			return new VertexData (modifiedVertices[index], modifiedNormals[index]);
+			return new VertexData (modifiedVertices[index], modifiedNormals[index], baseTangents[index]);
 		}
 
 		/// <summary>
@@ -176,7 +176,8 @@ namespace MeshModifiers
 			// Update the mesh's vertices to reflect the modified vertices.
 			Mesh.SetVertices (modifiedVertices.ToList ());
 
-			Mesh.RecalculateNormals ();
+			if (updateNormals)
+				Mesh.RecalculateNormals ();
 			Mesh.RecalculateBounds ();
 
 			// Reset the modded vertices to their base state so next frames modifications are based on the original vertices.

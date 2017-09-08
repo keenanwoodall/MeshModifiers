@@ -6,11 +6,13 @@ namespace MeshModifiers
 	{
 		public Vector3 position;
 		public Vector3 normal;
+		public Vector4 tangent;
 
-		public VertexData (Vector3 position, Vector3 normal)
+		public VertexData (Vector3 position, Vector3 normal, Vector4 tangent)
 		{
 			this.position = position;
 			this.normal = normal;
+			this.tangent = tangent;
 		}
 	}
 	[RequireComponent (typeof (ModifierObject))]

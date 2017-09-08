@@ -9,7 +9,7 @@ namespace MeshModifiers
 	{
 		public bool
 			useWorldPosition = false;
-		public enum NoiseDirection { Local, Normal, Spherical }
+		public enum NoiseDirection { Local, Normal, Tangent, Spherical }
 		public NoiseDirection noiseDirection = NoiseDirection.Spherical;
 
 		public Vector3 offset = Vector3.zero;
@@ -44,6 +44,8 @@ namespace MeshModifiers
 					return vertexData.position + (value * Magnitude) - Magnitude;
 				case NoiseDirection.Normal:
 					return vertexData.position + (Vector3.Scale (vertexData.normal, (value * Magnitude)));
+				case NoiseDirection.Tangent:
+					return vertexData.position + (Vector3.Scale (vertexData.tangent, (value * Magnitude)));
 				default:
 					return Vectorx.Multiply (vertexData.position, Vector3.one + (value * Magnitude));
 			}
