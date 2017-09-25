@@ -3,7 +3,6 @@ using UnityEngine.Events;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace MeshModifiers
 {
@@ -37,12 +36,22 @@ namespace MeshModifiers
 		/// </summary>
 		[System.NonSerialized]
 		public UnityEvent OnAutoUpdateStart = new UnityEvent ();
-
 		/// <summary>
 		/// Invoked after modifiers are auto-applied.
 		/// </summary>
 		[System.NonSerialized]
 		public UnityEvent OnAutoUpdateFinish = new UnityEvent ();
+
+		/// <summary>
+		/// Invoked before a chunk AutoApplyModifiers coroutine is modified.
+		/// </summary>
+		[System.NonSerialized]
+		public UnityEvent OnAutoChunkStart = new UnityEvent ();
+		/// <summary>
+		/// Invoked after a chunk AutoApplyModifiers coroutine is modified.
+		/// </summary>
+		[System.NonSerialized]
+		public UnityEvent OnAutoChunkFinish = new UnityEvent ();
 
 		private Vector3[] baseVertices;
 		private Vector3[] modifiedVertices;
@@ -403,7 +412,11 @@ namespace MeshModifiers
 						if (refreshModifiersEveryFrame)
 							RefreshModifiers ();
 
+						OnAutoChunkStart.Invoke ();
+
 						ModifyChunk (chunkSize * currentChunkIndex, chunkSize * (currentChunkIndex + 1) + ((currentChunkIndex + 1 == chunkCount) ? CalcVertRemainder (GetVertCount (), chunkSize, chunkCount) : 0), GetUseableModifiers ());
+
+						OnAutoChunkFinish.Invoke ();
 
 						// The current chunk's modifications are finished so the next chunk will start being processed.
 						CurrentModifiedChunkIndex++;

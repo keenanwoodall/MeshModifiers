@@ -11,7 +11,7 @@ namespace MeshModifiers
 			MIN_SAMPLE_SIZE = 10,
 			MAX_SAMPLE_SIZE = 100;
 
-		private const float PROCESSED_EXECUTION_TIME_UPDATE_DELAY = 0.5f;
+		private const float PROCESSED_EXECUTION_TIME_UPDATE_DELAY = 0.1f;
 
 
 		[Range (MIN_SAMPLE_SIZE, MAX_SAMPLE_SIZE)]
@@ -33,13 +33,14 @@ namespace MeshModifiers
 		{
 			modifierObject = GetComponent<ModifierObject> ();
 
-			modifierObject.OnAutoUpdateStart.AddListener (() => OnModsStart ());
-			modifierObject.OnAutoUpdateFinish.AddListener (() => OnModsFinish ());
+			modifierObject.OnAutoChunkStart.AddListener (() => OnModsStart ());
+			modifierObject.OnAutoChunkFinish.AddListener (() => OnModsFinish ());
 		}
 
 		private void OnModsStart ()
 		{
-			modifierStopWatch = Stopwatch.StartNew ();
+			modifierStopWatch = new Stopwatch ();
+			modifierStopWatch.Start ();
 		}
 
 		private void OnModsFinish ()
