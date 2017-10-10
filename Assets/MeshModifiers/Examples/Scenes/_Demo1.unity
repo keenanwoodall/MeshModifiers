@@ -77,15 +77,17 @@ LightmapSettings:
     m_PVRDirectSampleCount: 32
     m_PVRSampleCount: 500
     m_PVRBounces: 2
-    m_PVRFiltering: 0
+    m_PVRFilterTypeDirect: 0
+    m_PVRFilterTypeIndirect: 0
+    m_PVRFilterTypeAO: 0
     m_PVRFilteringMode: 1
     m_PVRCulling: 1
     m_PVRFilteringGaussRadiusDirect: 1
     m_PVRFilteringGaussRadiusIndirect: 5
     m_PVRFilteringGaussRadiusAO: 2
-    m_PVRFilteringAtrousColorSigma: 1
-    m_PVRFilteringAtrousNormalSigma: 1
-    m_PVRFilteringAtrousPositionSigma: 1
+    m_PVRFilteringAtrousPositionSigmaDirect: 0.5
+    m_PVRFilteringAtrousPositionSigmaIndirect: 2
+    m_PVRFilteringAtrousPositionSigmaAO: 1
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 0
 --- !u!196 &4
@@ -399,6 +401,7 @@ GameObject:
   - component: {fileID: 318751929}
   - component: {fileID: 318751928}
   - component: {fileID: 318751927}
+  - component: {fileID: 318751925}
   - component: {fileID: 318751926}
   - component: {fileID: 318751924}
   m_Layer: 0
@@ -420,6 +423,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sampleSize: 10
+--- !u!114 &318751925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 318751923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f754264c5fcf3a4da5ce32d5ea05174, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  update: 1
+  offset: 0
+  speed: 1
+  along: 1
+  by: 2
+  trig:
+    amplitude: 0.1
+    frequency: 3
+    trigType: 0
+  useWorldPos: 1
 --- !u!114 &318751926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -433,7 +457,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   update: 1
   useWorldPosition: 0
-  spherical: 1
+  noiseDirection: 3
   offset: {x: 0, y: 0, z: 0}
   speed: {x: 0.1, y: 0.1, z: 0.1}
   sampleScale: 1
@@ -458,22 +482,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   update: 1
-  offset: {x: 10, y: 10, z: 10}
-  speed: {x: 0.75, y: 0.75, z: 0.75}
-  xAxis:
-    amplitude: 0.05
-    frequency: 6
-    trigType: 0
-  yAxis:
-    amplitude: 0.05
-    frequency: 6
-    trigType: 0
-  zAxis:
-    amplitude: 0.05
-    frequency: 6
+  offset: 0
+  speed: 1
+  along: 0
+  by: 1
+  trig:
+    amplitude: 0.1
+    frequency: 3
     trigType: 0
   useWorldPos: 1
-  radial: 0
 --- !u!114 &318751928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -486,22 +503,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   update: 1
-  offset: {x: 0, y: 0, z: 0}
-  speed: {x: 1, y: 1, z: 1}
-  xAxis:
-    amplitude: 0.05
-    frequency: 6
-    trigType: 0
-  yAxis:
-    amplitude: 0.05
-    frequency: 6
-    trigType: 0
-  zAxis:
-    amplitude: 0.05
-    frequency: 6
+  offset: 0
+  speed: 1
+  along: 0
+  by: 2
+  trig:
+    amplitude: 0.1
+    frequency: 3
     trigType: 0
   useWorldPos: 1
-  radial: 0
 --- !u!114 &318751929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -515,8 +525,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoUpdate: 1
   modifierStrength: 1
-  normalQuality: 1
-  smoothingAngle: 60
+  modifierStrengthVertexMask: 0
+  updateNormals: 1
   modifyFrames: 1
 --- !u!23 &318751930
 MeshRenderer:
@@ -1289,7 +1299,7 @@ Prefab:
       value: 6.116778
       objectReference: {fileID: 0}
     - target: {fileID: 19822192, guid: e9a6501da28be2b4986e8ba47c2e017c, type: 2}
-      propertyPath: EmissionModule.rate.scalar
+      propertyPath: EmissionModule.rateOverTime.scalar
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 183190, guid: e9a6501da28be2b4986e8ba47c2e017c, type: 2}
@@ -1311,6 +1321,30 @@ Prefab:
     - target: {fileID: 19822192, guid: e9a6501da28be2b4986e8ba47c2e017c, type: 2}
       propertyPath: ShapeModule.m_Scale.y
       value: 6.5204306
+      objectReference: {fileID: 0}
+    - target: {fileID: 19822192, guid: e9a6501da28be2b4986e8ba47c2e017c, type: 2}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 19822192, guid: e9a6501da28be2b4986e8ba47c2e017c, type: 2}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 19822192, guid: e9a6501da28be2b4986e8ba47c2e017c, type: 2}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 19822192, guid: e9a6501da28be2b4986e8ba47c2e017c, type: 2}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 19822192, guid: e9a6501da28be2b4986e8ba47c2e017c, type: 2}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 19822192, guid: e9a6501da28be2b4986e8ba47c2e017c, type: 2}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e9a6501da28be2b4986e8ba47c2e017c, type: 2}
