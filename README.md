@@ -23,11 +23,9 @@ An easy-to-use mesh-modifying system that functions similarly to 3D modeling pro
 
 (Current) **LIMITATIONS**
 
-- Runs on CPU, isn't shader
+- Runs on CPU / Is not multi-threaded (yet?)
 
-- Is not multi-threaded (yet?)
-
-- Only runs in Play Mode/runtime
+- Only runs in Play Mode/Runtime
 
 **VIDEOS**
 
