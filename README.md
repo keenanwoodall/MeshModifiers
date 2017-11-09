@@ -3,7 +3,7 @@ An easy-to-use mesh-modifying system that functions similarly to 3D modeling pro
 
 **FEATURES**
 
-- Modifiers are stackable
+- Modifiers are stackable and reorderable
 
 - You can save modified meshes to your project
 
