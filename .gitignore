@@ -44,3 +44,5 @@ Assets/Plugins.meta
 Assets/Plugins/Editor/JetBrains.meta
 .idea/.idea.MeshModifiers/.idea/contentModel.xml
 .idea/.idea.MeshModifiers/.idea/workspace.xml
+.vs/MeshModifiers/v15/Server/sqlite3/db.lock
+.vs/MeshModifiers/v15/Server/sqlite3/storage.ide

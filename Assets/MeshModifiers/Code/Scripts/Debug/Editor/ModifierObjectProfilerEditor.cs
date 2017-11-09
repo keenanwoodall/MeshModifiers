@@ -19,8 +19,8 @@ namespace MeshModifiers
 
 			if (Application.isPlaying)
 			{
-				consistentTime = ((int)current.ConsistentExecutionTime).ToString ();
-				averageTime = ((int)current.AverageExecutionTime).ToString ();
+				consistentTime = (current.ConsistentExecutionTime).ToString ("n2");
+				averageTime = (current.AverageExecutionTime).ToString ("n2");
 			}
 			else
 			{
