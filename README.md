@@ -21,7 +21,7 @@ An easy-to-use mesh-modifying system that functions similarly to 3D modeling pro
 
 - Fully commented ( so that if the code is bad, you know why! )
 
-(Current) **LIMITATIONS**
+**LIMITATIONS**
 
 - Runs on CPU / Is not multi-threaded (yet?)
 
