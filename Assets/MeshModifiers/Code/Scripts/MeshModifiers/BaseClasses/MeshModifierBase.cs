@@ -4,12 +4,14 @@ namespace MeshModifiers
 {
 	public struct VertexData
 	{
+		public Vector3 basePosition;
 		public Vector3 position;
 		public Vector3 normal;
 		public Vector4 tangent;
 
-		public VertexData (Vector3 position, Vector3 normal, Vector4 tangent)
+		public VertexData (Vector3 basePosition, Vector3 position, Vector3 normal, Vector4 tangent)
 		{
+			this.basePosition = basePosition;
 			this.position = position;
 			this.normal = normal;
 			this.tangent = tangent;

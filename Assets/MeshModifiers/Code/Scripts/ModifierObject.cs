@@ -175,7 +175,7 @@ namespace MeshModifiers
 		}
 		private VertexData ConstructData (int index)
 		{
-			return new VertexData (modifiedVertices[index], modifiedNormals[index], baseTangents[index]);
+			return new VertexData (baseVertices[index], modifiedVertices[index], modifiedNormals[index], baseTangents[index]);
 		}
 
 		/// <summary>

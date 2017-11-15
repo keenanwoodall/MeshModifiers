@@ -2,7 +2,7 @@
 using MeshModifiers;
 
 [AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "Matrix")]
-public class MatrixMultiplier : MeshModifierBase
+public class MatrixMultiplierModifier : MeshModifierBase
 {
 	public Matrix4x4 matrix = Matrix4x4.identity;
 
