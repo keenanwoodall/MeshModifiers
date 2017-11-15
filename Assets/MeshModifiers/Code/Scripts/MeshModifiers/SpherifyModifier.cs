@@ -2,8 +2,8 @@
 
 namespace MeshModifiers
 {
-	[AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "Spherize")]
-	public class SpherizeModifier : MeshModifierBase
+	[AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "Spherify")]
+	public class SpherifyModifier : MeshModifierBase
 	{
 		[Range (0f, 1f)]
 		public float amount = 1f;
