@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
-using MeshModifiers;
 
 namespace MeshModifiers
 {
-	// If you want to add this modifier to the component menu, uncomment the line below and type in your modifier name.
 	[AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "Anti Modifier")]
 	public class AntiModifier : MeshModifierBase
 	{
