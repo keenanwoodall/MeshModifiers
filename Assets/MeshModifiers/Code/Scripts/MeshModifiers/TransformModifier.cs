@@ -1,26 +1,28 @@
 ﻿using UnityEngine;
-using MeshModifiers;
 
-[AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "Transform")]
-public class TransformModifier : MeshModifierBase
+namespace MeshModifiers
 {
-	public Vector3 
-		position = Vector3.zero,
-		rotation = Vector3.zero,
-		scale = Vector3.one;
-
-	private Matrix4x4 transformSpace;
-
-	public override void PreMod ()
+	[AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "Transform")]
+	public class TransformModifier : MeshModifierBase
 	{
-		base.PreMod ();
+		public Vector3
+			position = Vector3.zero,
+			rotation = Vector3.zero,
+			scale = Vector3.one;
 
-		transformSpace = Matrix4x4.identity;
-		transformSpace *= Matrix4x4.TRS (position, Quaternion.Euler (rotation), scale);
-	}
+		private Matrix4x4 transformSpace;
 
-	protected override Vector3 _ModifyOffset (VertexData vertexData)
-	{
-		return transformSpace.MultiplyPoint3x4 (vertexData.position);
+		public override void PreMod ()
+		{
+			base.PreMod ();
+
+			transformSpace = Matrix4x4.identity;
+			transformSpace *= Matrix4x4.TRS (position, Quaternion.Euler (rotation), scale);
+		}
+
+		protected override Vector3 _ModifyOffset (VertexData vertexData)
+		{
+			return transformSpace.MultiplyPoint3x4 (vertexData.position);
+		}
 	}
 }

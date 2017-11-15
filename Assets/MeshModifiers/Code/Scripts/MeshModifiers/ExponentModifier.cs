@@ -1,32 +1,34 @@
 ﻿using UnityEngine;
-using MeshModifiers;
 
-[AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "Exponent")]
-public class ExponentModifier : MeshModifierBase
+namespace MeshModifiers
 {
-	public Vector3 value = Vector3.zero;
-	public bool absolute = true;
-
-	public override void PreMod ()
+	[AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "Exponent")]
+	public class ExponentModifier : MeshModifierBase
 	{
-		base.PreMod ();
-	}
+		public Vector3 value = Vector3.zero;
+		public bool absolute = true;
 
-	protected override Vector3 _ModifyOffset (VertexData vertexData)
-	{
-		if (absolute)
+		public override void PreMod ()
 		{
-			vertexData.position.x *= Mathf.Exp (Mathf.Abs (vertexData.position.x * value.x));
-			vertexData.position.y *= Mathf.Exp (Mathf.Abs (vertexData.position.y * value.y));
-			vertexData.position.z *= Mathf.Exp (Mathf.Abs (vertexData.position.z * value.z));
-		}
-		else
-		{
-			vertexData.position.x *= Mathf.Exp (vertexData.position.x * value.x);
-			vertexData.position.y *= Mathf.Exp (vertexData.position.y * value.y);
-			vertexData.position.z *= Mathf.Exp (vertexData.position.z * value.z);
+			base.PreMod ();
 		}
 
-		return vertexData.position;
+		protected override Vector3 _ModifyOffset (VertexData vertexData)
+		{
+			if (absolute)
+			{
+				vertexData.position.x *= Mathf.Exp (Mathf.Abs (vertexData.position.x * value.x));
+				vertexData.position.y *= Mathf.Exp (Mathf.Abs (vertexData.position.y * value.y));
+				vertexData.position.z *= Mathf.Exp (Mathf.Abs (vertexData.position.z * value.z));
+			}
+			else
+			{
+				vertexData.position.x *= Mathf.Exp (vertexData.position.x * value.x);
+				vertexData.position.y *= Mathf.Exp (vertexData.position.y * value.y);
+				vertexData.position.z *= Mathf.Exp (vertexData.position.z * value.z);
+			}
+
+			return vertexData.position;
+		}
 	}
 }

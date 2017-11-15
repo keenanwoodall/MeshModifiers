@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using MeshModifiers;
 
 [RequireComponent (typeof (TwistModifier))]
 public class AnimateTwistModifier : MonoBehaviour
