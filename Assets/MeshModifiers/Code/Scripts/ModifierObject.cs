@@ -273,7 +273,7 @@ namespace MeshModifiers
 		/// </summary>
 		public int GetModifiedVertsPerSecond ()
 		{
-			return (int)(60f * (GetModifiedVertsPerFrame () * UnityEngine.Time.deltaTime));
+			return (int)(60f * GetModifiedVertsPerFrame ());
 		}
 
 		/// <summary>
@@ -331,9 +331,9 @@ namespace MeshModifiers
 		/// <summary>
 		/// Should this object perform modifications to the mesh?
 		/// </summary>
-		private bool CanModify ()
+		private bool ShouldModify ()
 		{
-			return (IsVisible || updateWhenHidden) && autoUpdate;
+			return modifiers.Count > 0 && modifiers != null && (IsVisible || updateWhenHidden) && autoUpdate;
 		}
 
 		/// <summary>
@@ -390,7 +390,7 @@ namespace MeshModifiers
 		{
 			while (true)
 			{
-				if (CanModify ())
+				if (ShouldModify ())
 				{
 					OnAutoUpdateStart.Invoke ();
 
