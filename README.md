@@ -29,6 +29,8 @@ An easy-to-use mesh-modifying system that functions similarly to 3D modeling pro
 
 **VIDEOS**
 
+- [Tutorials](https://www.youtube.com/watch?v=3PVxmjFQKSM&list=PLrWlVANGG-igIawnL1YhlBbf3FgNGm3a2)
+
 - [Main demo](https://www.youtube.com/watch?v=nvfCAdSuWH0)
 
 - [Recreating the demo video](https://youtu.be/yx8oMHsCUe0)
