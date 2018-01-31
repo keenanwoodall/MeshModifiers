@@ -14,6 +14,6 @@ public class DivergenceFreeModifier : NoiseModifierBase
 		var sampleCoordinates = GetSampleCoordinate (vertexData.position);
 		var value = ((noiseDirection == NoiseDirection.Spherical) ? noiseModule.GetDFNoise (sampleCoordinates) : noiseModule.GetGradient (sampleCoordinates));
 		
-		return FormatValue (value, vertexData.position);
+		return FormatValue (value, vertexData);
 	}
 }

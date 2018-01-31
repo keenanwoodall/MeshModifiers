@@ -105,10 +105,12 @@ namespace MeshModifiers
 			RefreshModifiers ();
 
 			StartCoroutine (AutoApplyModifiers ());
+#if UNITY_EDITOR
 			UnityEditor.Undo.undoRedoPerformed += () =>
 			{
 				ModifyAll ();
 			};
+#endif
 		}
 		private void OnWillRenderObject ()
 		{
@@ -172,6 +174,9 @@ namespace MeshModifiers
 
 				PostModPointOperation (currentVert);
 			}
+
+			if (updateNormals)
+				Mesh.RecalculateNormals ();
 		}
 		private VertexData ConstructData (int index)
 		{

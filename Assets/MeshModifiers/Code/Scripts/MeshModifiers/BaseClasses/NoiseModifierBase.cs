@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using LibNoise;
 using Mathx;
 
 namespace MeshModifiers
@@ -51,9 +49,19 @@ namespace MeshModifiers
 			}
 		}
 
-		protected Vector3 FormatValue (Vector3 value, Vector3 basePosition)
+		protected Vector3 FormatValue (Vector3 value, VertexData vertexData)
 		{
-			return Vectorx.Multiply (basePosition, Vector3.one + Vectorx.Multiply (value, Magnitude));
+			switch (noiseDirection)
+			{
+				case NoiseDirection.Local:
+					return vertexData.position + (Vector3.Scale (value, Magnitude)) - Magnitude;
+				case NoiseDirection.Normal:
+					return vertexData.position + (Vector3.Scale (vertexData.normal, Vector3.Scale (value, Magnitude)));
+				case NoiseDirection.Tangent:
+					return vertexData.position + (Vector3.Scale (vertexData.tangent, Vector3.Scale (value, Magnitude)));
+				default:
+					return Vectorx.Multiply (vertexData.position, Vector3.one + Vector3.Scale (value, Magnitude));
+			}
 		}
 	}
 }
