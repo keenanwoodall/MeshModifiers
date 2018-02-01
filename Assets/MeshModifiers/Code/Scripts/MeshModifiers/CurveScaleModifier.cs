@@ -6,8 +6,8 @@ namespace MeshModifiers
 	public class CurveScaleModifier : MeshModifierBase
 	{
 		public AnimationCurve curve = AnimationCurve.Linear (0f, 0f, 1f, 1f);
-		public Axis by = Axis.X;
 		public Axis along = Axis.Y;
+		public Axis by = Axis.X;
 
 		private Bounds meshBounds;
 
