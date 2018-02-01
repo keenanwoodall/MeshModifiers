@@ -1,20 +1,22 @@
 ﻿using UnityEngine;
 using LibNoise.Generator;
-using MeshModifiers;
 
-[AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "Noise/Perlin")]
-public class PerlinModifier : NoiseModifierBase
+namespace MeshModifiers.NoiseModifier
 {
-	[SerializeField]
-	private Perlin noiseModule = new Perlin ();
-
-	protected override Vector3 _ModifyOffset (VertexData vertexData)
+	[AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "Noise/Perlin")]
+	public class PerlinModifier : NoiseModifierBase
 	{
-		if (!noiseModule.IsDisposed)
-			noiseModule.Dispose ();
-		
-		var value = 0.5f + (float)noiseModule.GetValue (GetSampleCoordinate (vertexData.position));
+		[SerializeField]
+		private Perlin noiseModule = new Perlin ();
 
-		return FormatValue (value, vertexData);
+		protected override Vector3 _ModifyOffset (VertexData vertexData)
+		{
+			if (!noiseModule.IsDisposed)
+				noiseModule.Dispose ();
+
+			var value = 0.5f + (float)noiseModule.GetValue (GetSampleCoordinate (vertexData.position));
+
+			return FormatValue (value, vertexData);
+		}
 	}
 }

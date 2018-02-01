@@ -1,20 +1,22 @@
 ﻿using UnityEngine;
-using MeshModifiers;
 using LibNoise.Generator;
 
-[AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "Noise/Billow")]
-public class BillowModifier : NoiseModifierBase
+namespace MeshModifiers.NoiseModifier
 {
-	[SerializeField]
-	private Billow noiseModule = new Billow ();
-
-	protected override Vector3 _ModifyOffset (VertexData vertexData)
+	[AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "Noise/Billow")]
+	public class BillowModifier : NoiseModifierBase
 	{
-		if (!noiseModule.IsDisposed)
-			noiseModule.Dispose ();
+		[SerializeField]
+		private Billow noiseModule = new Billow ();
 
-		var value = 0.5f + (float)noiseModule.GetValue (GetSampleCoordinate (vertexData.position));
+		protected override Vector3 _ModifyOffset (VertexData vertexData)
+		{
+			if (!noiseModule.IsDisposed)
+				noiseModule.Dispose ();
 
-		return FormatValue (value, vertexData);
+			var value = 0.5f + (float)noiseModule.GetValue (GetSampleCoordinate (vertexData.position));
+
+			return FormatValue (value, vertexData);
+		}
 	}
 }

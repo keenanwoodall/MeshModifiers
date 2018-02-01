@@ -1,20 +1,22 @@
 ﻿using UnityEngine;
 using LibNoise.Generator;
-using MeshModifiers;
 
-[AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "Noise/Ridged Multifractal")]
-public class RidgedMultifractalModifier : NoiseModifierBase
+namespace MeshModifiers.NoiseModifier
 {
-	[SerializeField]
-	private RidgedMultifractal noiseModule = new RidgedMultifractal ();
-
-	protected override Vector3 _ModifyOffset (VertexData vertexData)
+	[AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "Noise/Ridged Multifractal")]
+	public class RidgedMultifractalModifier : NoiseModifierBase
 	{
-		if (!noiseModule.IsDisposed)
-			noiseModule.Dispose ();
+		[SerializeField]
+		private RidgedMultifractal noiseModule = new RidgedMultifractal ();
 
-		var value = 0.5f + (float)noiseModule.GetValue (GetSampleCoordinate (vertexData.position));
+		protected override Vector3 _ModifyOffset (VertexData vertexData)
+		{
+			if (!noiseModule.IsDisposed)
+				noiseModule.Dispose ();
 
-		return FormatValue (value, vertexData);
+			var value = 0.5f + (float)noiseModule.GetValue (GetSampleCoordinate (vertexData.position));
+
+			return FormatValue (value, vertexData);
+		}
 	}
 }

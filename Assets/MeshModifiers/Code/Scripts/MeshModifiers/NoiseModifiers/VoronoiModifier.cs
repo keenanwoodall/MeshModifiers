@@ -1,20 +1,22 @@
 ﻿using UnityEngine;
-using MeshModifiers;
 using LibNoise.Generator;
 
-[AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "Noise/Voronoi")]
-public class VoronoiModifier : NoiseModifierBase
+namespace MeshModifiers.NoiseModifier
 {
-	[SerializeField]
-	private Voronoi noiseModule = new Voronoi ();
-
-	protected override Vector3 _ModifyOffset (VertexData vertexData)
+	[AddComponentMenu (MeshModifierConstants.ADD_COMP_BASE_NAME + "Noise/Voronoi")]
+	public class VoronoiModifier : NoiseModifierBase
 	{
-		if (!noiseModule.IsDisposed)
-			noiseModule.Dispose ();
+		[SerializeField]
+		private Voronoi noiseModule = new Voronoi ();
 
-		var value = 0.5f + (float)noiseModule.GetValue (GetSampleCoordinate (vertexData.position));
+		protected override Vector3 _ModifyOffset (VertexData vertexData)
+		{
+			if (!noiseModule.IsDisposed)
+				noiseModule.Dispose ();
 
-		return FormatValue (value, vertexData);
+			var value = 0.5f + (float)noiseModule.GetValue (GetSampleCoordinate (vertexData.position));
+
+			return FormatValue (value, vertexData);
+		}
 	}
 }
