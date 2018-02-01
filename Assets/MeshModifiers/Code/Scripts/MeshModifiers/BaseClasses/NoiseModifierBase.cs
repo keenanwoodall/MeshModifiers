@@ -27,7 +27,7 @@ namespace MeshModifiers
 
 		protected Vector3 GetSampleCoordinate (Vector3 basePosition)
 		{
-			Vector3 coordinate = (basePosition + (speed * modObject.Time) + offset) * sampleScale;
+			Vector3 coordinate = (basePosition + ((speed / sampleScale) * modObject.Time) + offset) * sampleScale;
 			if (useWorldPosition)
 				coordinate += modObject.transform.position;
 
