@@ -48,7 +48,7 @@ namespace MeshModifiers
 
 		private Vector3 Trig3 (Vector3 t)
 		{
-			var animatedOffset = speed * modObject.Time;
+			var animatedOffset = offset + speed * modObject.Time;
 			var byValue = 0f;
 			switch (by)
 			{
