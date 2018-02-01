@@ -33,12 +33,6 @@ An easy-to-use mesh-modifying system that functions similarly to 3D modeling pro
 
 - [Main demo](https://www.youtube.com/watch?v=nvfCAdSuWH0)
 
-- [Recreating the demo video](https://youtu.be/yx8oMHsCUe0)
-
-- [Making a modifier](https://youtu.be/gw-HJV3Wvek)
-
-- [Fiddling with the demo](https://youtu.be/0iJNBN0Kuhw)
-
 &nbsp;
 
 Keenan Woodall
