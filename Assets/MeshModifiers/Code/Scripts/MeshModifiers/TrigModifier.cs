@@ -9,14 +9,13 @@ namespace MeshModifiers
 		public float
 			offset,
 			speed;
-		public Axis along;
-		public Axis by;
+		public Axis along = Axis.X;
+		public Axis by = Axis.Y;
 		public Trig
-			trig = new Trig (TrigType.Sin);
-		public bool useWorldPos = false;
+			function = new Trig (TrigType.Sin);
+		public bool useWorldPosition = false;
 
 		private Vector3 axisOffset;
-
 
 		public override void PreMod ()
 		{
@@ -36,7 +35,7 @@ namespace MeshModifiers
 		protected override Vector3 _ModifyOffset (VertexData vertexData)
 		{
 			var position = vertexData.position;
-			if (useWorldPos)
+			if (useWorldPosition)
 				return position + TrigOffset (position + transform.position + axisOffset);
 			else
 				return position + TrigOffset (position + axisOffset);
@@ -66,11 +65,11 @@ namespace MeshModifiers
 			switch (along)
 			{
 				case Axis.X:
-					return new Vector3 (trig.Solve (byValue, animatedOffset), 0f, 0f);
+					return new Vector3 (function.Solve (byValue, animatedOffset), 0f, 0f);
 				case Axis.Y:
-					return new Vector3 (0f, trig.Solve (byValue, animatedOffset), 0f);
+					return new Vector3 (0f, function.Solve (byValue, animatedOffset), 0f);
 				default:
-					return new Vector3 (0f, 0f, trig.Solve (byValue, animatedOffset));
+					return new Vector3 (0f, 0f, function.Solve (byValue, animatedOffset));
 			}
 		}
 	}
