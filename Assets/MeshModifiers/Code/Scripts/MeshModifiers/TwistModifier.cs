@@ -12,7 +12,6 @@ namespace MeshModifiers
 
 		private Bounds bounds;
 
-
 		public override void PreMod ()
 		{
 			bounds = modObject.GetBounds ();
@@ -30,7 +29,6 @@ namespace MeshModifiers
 					angle *= strengthCurve.Evaluate (Mathf.InverseLerp (-bounds.extents.x, bounds.extents.x, position.x));
 					cos = Mathf.Cos (angle);
 					sin = Mathf.Sin (angle);
-
 					position.z = position.z * cos - position.y * sin;
 					position.y = position.y * cos + position.z * sin;
 					break;
@@ -39,7 +37,6 @@ namespace MeshModifiers
 					angle *= strengthCurve.Evaluate (Mathf.InverseLerp (-bounds.extents.y, bounds.extents.y, position.y));
 					cos = Mathf.Cos (angle);
 					sin = Mathf.Sin (angle);
-
 					position.x = position.x * cos - position.z * sin;
 					position.z = position.z * cos + position.x * sin;
 					break;
@@ -48,7 +45,6 @@ namespace MeshModifiers
 					angle *= strengthCurve.Evaluate (Mathf.InverseLerp (-bounds.extents.z, bounds.extents.z, position.z));
 					cos = Mathf.Cos (angle);
 					sin = Mathf.Sin (angle);
-
 					position.x = position.x * cos - position.y * sin;
 					position.y = position.y * cos + position.x * sin;
 					break;

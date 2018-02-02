@@ -23,6 +23,7 @@ namespace MeshModifiers
 		public Vector3 SkewDirection
 		{
 			get { return Quaternion.Euler (skewRotation) * ((inWorldSpace) ? Vector3.forward : transform.forward); }
+			set { skewRotation = Quaternion.Euler (skewRotation) * ((inWorldSpace) ? Vector3.forward : transform.forward); }
 		}
 
 		private void OnValidate ()

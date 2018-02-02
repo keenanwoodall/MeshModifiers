@@ -7,8 +7,8 @@ namespace MeshModifiers
 	{
 		public float strength = 0.5f;
 		public float radius = 0.5f;
+		public bool invert;
 		public Vector3 position;
-		public AnimationCurve falloff = AnimationCurve.Linear (0f, 0f, 1f, 1f);
 
 		private void OnDrawGizmosSelected ()
 		{
@@ -17,9 +17,19 @@ namespace MeshModifiers
 		protected override Vector3 _ModifyOffset (VertexData vertexData)
 		{
 			var distance = Vector3.Distance (vertexData.position, position);
-			if (distance < radius)
+			if (!invert)
 			{
-				return Vector3.Lerp (vertexData.position, vertexData.basePosition, falloff.Evaluate ((1f - (distance / radius)) * strength));
+				if (distance < radius)
+				{
+					return Vector3.Lerp (vertexData.position, vertexData.basePosition, (distance / radius) * strength);
+				}
+			}
+			else
+			{
+				if (distance > radius)
+				{
+					return Vector3.Lerp (vertexData.position, vertexData.basePosition, (distance / radius) * strength);
+				}
 			}
 			return vertexData.position;
 		}
