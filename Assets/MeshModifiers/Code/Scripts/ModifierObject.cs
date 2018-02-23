@@ -94,7 +94,7 @@ namespace MeshModifiers
 			set { mesh = value; }
 		}
 
-		
+
 		private void Awake ()
 		{
 			Filter = GetComponent<MeshFilter> ();
@@ -441,7 +441,7 @@ namespace MeshModifiers
 				yield return null;
 			}
 		}
-		
+
 		/// <summary>
 		/// Finds the number of vertices that can't be grouped in the chunks.
 		/// </summary>
