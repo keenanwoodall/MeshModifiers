@@ -1,6 +1,6 @@
 # MeshModifiers
 An easy-to-use mesh-modifying system that functions similarly to 3D modeling programs, in realtime.
-NOTE: This project is no longer in development. Check out [Deform](https://github.com/keenanwoodall/Deform) instead.
+NOTE: This project is no longer in development. Check out [Deform](https://github.com/keenanwoodall/Deform) instead. Its a rewrite of this project and is objectively better.
 
 **FEATURES**
 
